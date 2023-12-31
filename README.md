@@ -1,4 +1,4 @@
-# Sort images based on their capture date into a folder structure <year>/<month>/<day>
+# Sort images based on their capture date into a folder structure year/month/day
 
 ## Description
 
