@@ -212,7 +212,16 @@ def main():
         output_path (str): The output path where images will be copied to.
         log (str, optional): Set the logging level (DEBUG, INFO, WARNING, ERROR, CRITICAL). Defaults to "INFO".
     """
-    parser = argparse.ArgumentParser(description="Sort and copy images based on date, with automatic rotation and tagging.")
+    epilog = """Examples:
+  sortimages /data/photos /data/sorted
+  sortimages /data/photos /data/sorted --log DEBUG
+"""
+    parser = argparse.ArgumentParser(
+        prog="sortimages",
+        description="Sort and copy images based on date, with automatic rotation and tagging.",
+        epilog=epilog,
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+    )
     parser.add_argument("basepath", type=str, help="The base path where the images are located.")
     parser.add_argument("output_path", type=str, help="The output path where images will be copied to.")
     parser.add_argument("--log", type=str, default="INFO", help="Set the logging level (DEBUG, INFO, WARNING, ERROR, CRITICAL)")
