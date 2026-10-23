@@ -1,0 +1,5 @@
+image:
+  dockerfile: .ci/test.Dockerfile
+unit:
+  # execv ohne Shell: ein Befehl. Import compiliert das Modul mit.
+  cmd: ["python", "-c", "import sortinfolder"]
