@@ -1,0 +1,21 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "provider": {
+    "litellm": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "LiteLLM (Optio)",
+      "options": {
+        "baseURL": "http://litellm-proxy.agents.svc:4000/v1",
+        "apiKey": "{env:OPENAI_API_KEY}"
+      },
+      "models": {
+        "coding-router": {
+          "name": "Coding Router (complexity tiers)"
+        },
+        "coding-simple": {
+          "name": "Coding Simple"
+        }
+      }
+    }
+  }
+}
