@@ -1,5 +1,6 @@
 import struct
 import os
+import sys
 import shutil
 import argparse
 import logging
@@ -226,6 +227,10 @@ def main():
     parser.add_argument("output_path", type=str, help="The output path where images will be copied to.")
     parser.add_argument("--log", type=str, default="INFO", help="Set the logging level (DEBUG, INFO, WARNING, ERROR, CRITICAL)")
     args = parser.parse_args()
+
+    if not os.path.exists(args.basepath):
+        print(f"Error: basepath '{args.basepath}' does not exist.", file=sys.stderr)
+        sys.exit(1)
 
     # Set up logging level based on the argument
     numeric_level = getattr(logging, args.log.upper(), None)
