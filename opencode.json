@@ -5,7 +5,7 @@
       "npm": "@ai-sdk/openai-compatible",
       "name": "LiteLLM (Optio)",
       "options": {
-        "baseURL": "http://litellm-proxy.agents.svc:4000/v1",
+        "baseURL": "{env:OPENCODE_BASE_URL}",
         "apiKey": "{env:OPENAI_API_KEY}"
       },
       "models": {
