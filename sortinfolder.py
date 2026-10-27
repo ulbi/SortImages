@@ -227,6 +227,9 @@ def main():
     parser.add_argument("--log", type=str, default="INFO", help="Set the logging level (DEBUG, INFO, WARNING, ERROR, CRITICAL)")
     args = parser.parse_args()
 
+    if not os.path.isdir(args.basepath):
+        parser.error(f"The folder to sort '{args.basepath}' does not exist.")
+
     # Set up logging level based on the argument
     numeric_level = getattr(logging, args.log.upper(), None)
     if not isinstance(numeric_level, int):
