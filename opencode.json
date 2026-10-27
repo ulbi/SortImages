@@ -11,9 +11,6 @@
       "models": {
         "coding-router": {
           "name": "Coding Router (complexity tiers)"
-        },
-        "coding-simple": {
-          "name": "Coding Simple"
         }
       }
     }
