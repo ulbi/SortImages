@@ -1,0 +1,11 @@
+# Codex-Provider-Konfiguration fuer Optio (AK4/#1006).
+# Codex liest ".codex/config.toml" als Projekt-Config - wird vom
+# Repo-Worktree aus geladen, genau wie opencode.json bei AK3.
+model_provider = "litellm"
+model = "coding-router"
+
+[model_providers.litellm]
+name = "LiteLLM (Optio #1006)"
+base_url = "http://litellm-proxy.agents.svc:4000/v1"
+env_key = "OPENAI_API_KEY"
+wire_api = "responses"
