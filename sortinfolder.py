@@ -8,7 +8,8 @@ import exifread
 from datetime import datetime
 import piexif
 import concurrent.futures
-import logging
+
+__version__ = "0.1.0"
 
 def setup_logging(level):
     """
@@ -225,6 +226,7 @@ def main():
     parser.add_argument("basepath", type=str, help="The base path where the images are located.")
     parser.add_argument("output_path", type=str, help="The output path where images will be copied to.")
     parser.add_argument("--log", type=str, default="INFO", help="Set the logging level (DEBUG, INFO, WARNING, ERROR, CRITICAL)")
+    parser.add_argument("--version", action="version", version=__version__)
     args = parser.parse_args()
 
     # Set up logging level based on the argument
