@@ -25,13 +25,14 @@ This Python script automatically sorts image files into folders based on their c
 3. Run the script using the command line:
 
 ```
-python image_processor.py [basepath] [output_path] [--log LEVEL]
+python image_processor.py [basepath] [output_path] [--log LEVEL] [--dry-run]
 ```
 
 
 - `basepath`: The directory where your images are stored.
 - `output_path`: The directory where processed images will be saved.
 - `--log`: (Optional) Set the logging level (`DEBUG`, `INFO`, `WARNING`, `ERROR`, `CRITICAL`). Defaults to `INFO`.
+- `--dry-run`: (Optional) Print the planned moves (`Move <source> -> <destination>`) without moving any files.
 
 ## Functions
 
@@ -41,7 +42,7 @@ python image_processor.py [basepath] [output_path] [--log LEVEL]
 - `get_date_taken(path)`: Extracts the date the image was taken from its EXIF data.
 - `add_relative_path_tag(image_path, relative_path)`: Adds a relative path tag to the image's EXIF data.
 - `process_image(file_path, basepath, output_path)`: Processes an individual image file.
-- `sort_images(basepath, output_path)`: Sorts and processes all images in a specified directory.
+- `sort_images(basepath, output_path, dry_run=False)`: Sorts and processes all images in a specified directory.
 - `main()`: Entry point for the script, handling command line arguments.
 
 ## Logging

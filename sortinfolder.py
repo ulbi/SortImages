@@ -141,6 +141,23 @@ def add_relative_path_tag(image_path, relative_path):
     except Exception as e:
         logging.error(f"Error adding tag to file {image_path}: {e}")
 
+def get_destination_path(file_path, output_path):
+    """
+    Compute the destination path for a given file, or None if the file is not eligible for processing.
+
+    Args:
+        file_path (str): The path of the image file to be processed.
+        output_path (str): The path of the directory where the processed image will be saved.
+
+    Returns:
+        str or None: The destination path if the file should be processed, None otherwise.
+    """
+    if file_path.lower().endswith('.jpg') and os.path.getsize(file_path) > 100 * 1024:
+        date_taken = get_date_taken(file_path)
+        new_folder = os.path.join(output_path, date_taken.strftime("%Y/%m/%d"))
+        return os.path.join(new_folder, os.path.basename(file_path))
+    return None
+
 def process_image(file_path, basepath, output_path):
     """
     Process an image file by copying it to a new location, organizing it by date, rotating it if needed,
@@ -154,28 +171,28 @@ def process_image(file_path, basepath, output_path):
     Returns:
         None
     """
-    if file_path.lower().endswith('.jpg') and os.path.getsize(file_path) > 100 * 1024:
-        logging.debug(f"Processing file: {file_path}")
-        date_taken = get_date_taken(file_path)
-        new_folder = os.path.join(output_path, date_taken.strftime("%Y/%m/%d"))
-        if not os.path.exists(new_folder):
-            os.makedirs(new_folder)
-            logging.info(f"Created directory for date: {new_folder}")
+    new_file_path = get_destination_path(file_path, output_path)
+    if new_file_path is None:
+        return
+    logging.debug(f"Processing file: {file_path}")
 
-        new_file_path = os.path.join(new_folder, os.path.basename(file_path))
-        
-        # Copying the image
-        shutil.copy2(file_path, new_file_path)
-        logging.info(f"Copied {file_path} to {new_file_path}")
+    new_folder = os.path.dirname(new_file_path)
+    if not os.path.exists(new_folder):
+        os.makedirs(new_folder)
+        logging.info(f"Created directory for date: {new_folder}")
 
-        # Rotate image if needed
-        rotate_image_according_to_exif(new_file_path)
+    # Copying the image
+    shutil.copy2(file_path, new_file_path)
+    logging.info(f"Copied {file_path} to {new_file_path}")
 
-        # Add the relative path as a tag
-        relative_path = os.path.relpath(os.path.dirname(file_path), basepath)
-        add_relative_path_tag(new_file_path, relative_path)
+    # Rotate image if needed
+    rotate_image_according_to_exif(new_file_path)
 
-def sort_images(basepath, output_path):
+    # Add the relative path as a tag
+    relative_path = os.path.relpath(os.path.dirname(file_path), basepath)
+    add_relative_path_tag(new_file_path, relative_path)
+
+def sort_images(basepath, output_path, dry_run=False):
     """
     Sorts images in the specified basepath and saves them to the output_path.
     This is done in 30 threads in parallel.
@@ -183,19 +200,30 @@ def sort_images(basepath, output_path):
     Args:
         basepath (str): The base path where the images are located.
         output_path (str): The path where the sorted images will be saved.
+        dry_run (bool): If True, only print what would be moved without moving any files.
 
     Returns:
         None
     """
     if not os.path.exists(output_path):
-        os.makedirs(output_path)
-        logging.info(f"Created output directory: {output_path}")
+        if dry_run:
+            logging.info(f"[dry-run] Would create output directory: {output_path}")
+        else:
+            os.makedirs(output_path)
+            logging.info(f"Created output directory: {output_path}")
 
     # List all files to process
     files_to_process = []
     for root, dirs, files in os.walk(basepath):
         for file in files:
             files_to_process.append(os.path.join(root, file))
+
+    if dry_run:
+        for file_path in sorted(files_to_process):
+            new_file_path = get_destination_path(file_path, output_path)
+            if new_file_path is not None:
+                print(f"Move {file_path} -> {new_file_path}")
+        return
 
     # Process files in parallel using a ThreadPool
     with concurrent.futures.ThreadPoolExecutor(max_workers=30) as executor:
@@ -225,6 +253,7 @@ def main():
     parser.add_argument("basepath", type=str, help="The base path where the images are located.")
     parser.add_argument("output_path", type=str, help="The output path where images will be copied to.")
     parser.add_argument("--log", type=str, default="INFO", help="Set the logging level (DEBUG, INFO, WARNING, ERROR, CRITICAL)")
+    parser.add_argument("--dry-run", action="store_true", help="Print what would be moved without moving any files.")
     args = parser.parse_args()
 
     # Set up logging level based on the argument
@@ -235,7 +264,7 @@ def main():
 
     logging.info(f"Script arguments - Basepath: {args.basepath}, Output Path: {args.output_path}")
     
-    sort_images(args.basepath, args.output_path)
+    sort_images(args.basepath, args.output_path, dry_run=args.dry_run)
 
 if __name__ == "__main__":
     main()
