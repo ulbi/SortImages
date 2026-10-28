@@ -222,6 +222,7 @@ def main():
         epilog=epilog,
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
+    parser.add_argument("--version", action="version", version="sortimages 1.0", help="Print the version and exit.")
     parser.add_argument("basepath", type=str, help="The base path where the images are located.")
     parser.add_argument("output_path", type=str, help="The output path where images will be copied to.")
     parser.add_argument("--log", type=str, default="INFO", help="Set the logging level (DEBUG, INFO, WARNING, ERROR, CRITICAL)")
