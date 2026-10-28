@@ -152,14 +152,14 @@ def process_image(file_path, basepath, output_path):
         output_path (str): The path of the directory where the processed image will be saved.
 
     Returns:
-        None
+        bool: True if the image was processed, False otherwise.
     """
     if file_path.lower().endswith('.jpg') and os.path.getsize(file_path) > 100 * 1024:
         logging.debug(f"Processing file: {file_path}")
         date_taken = get_date_taken(file_path)
         new_folder = os.path.join(output_path, date_taken.strftime("%Y/%m/%d"))
         if not os.path.exists(new_folder):
-            os.makedirs(new_folder)
+            os.makedirs(new_folder, exist_ok=True)
             logging.info(f"Created directory for date: {new_folder}")
 
         new_file_path = os.path.join(new_folder, os.path.basename(file_path))
@@ -174,6 +174,8 @@ def process_image(file_path, basepath, output_path):
         # Add the relative path as a tag
         relative_path = os.path.relpath(os.path.dirname(file_path), basepath)
         add_relative_path_tag(new_file_path, relative_path)
+        return True
+    return False
 
 def sort_images(basepath, output_path):
     """
@@ -185,7 +187,7 @@ def sort_images(basepath, output_path):
         output_path (str): The path where the sorted images will be saved.
 
     Returns:
-        None
+        int: The number of images processed.
     """
     if not os.path.exists(output_path):
         os.makedirs(output_path)
@@ -197,11 +199,14 @@ def sort_images(basepath, output_path):
         for file in files:
             files_to_process.append(os.path.join(root, file))
 
+    processed_count = 0
     # Process files in parallel using a ThreadPool
     with concurrent.futures.ThreadPoolExecutor(max_workers=30) as executor:
         futures = [executor.submit(process_image, file_path, basepath, output_path) for file_path in files_to_process]
         for future in concurrent.futures.as_completed(futures):
-            future.result()  # to catch exceptions
+            if future.result():  # to catch exceptions
+                processed_count += 1
+    return processed_count
 
 def main():
     """
@@ -225,6 +230,7 @@ def main():
     parser.add_argument("basepath", type=str, help="The base path where the images are located.")
     parser.add_argument("output_path", type=str, help="The output path where images will be copied to.")
     parser.add_argument("--log", type=str, default="INFO", help="Set the logging level (DEBUG, INFO, WARNING, ERROR, CRITICAL)")
+    parser.add_argument("--quiet", action="store_true", help="Suppress the summary printed after a successful run")
     args = parser.parse_args()
 
     # Set up logging level based on the argument
@@ -235,7 +241,9 @@ def main():
 
     logging.info(f"Script arguments - Basepath: {args.basepath}, Output Path: {args.output_path}")
     
-    sort_images(args.basepath, args.output_path)
+    processed_count = sort_images(args.basepath, args.output_path)
+    if processed_count > 0 and not args.quiet:
+        print(f"Processed {processed_count} images")
 
 if __name__ == "__main__":
     main()
