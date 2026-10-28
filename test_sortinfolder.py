@@ -13,3 +13,14 @@ def test_help_shows_usage_and_examples():
     assert "usage: sortimages" in output
     assert "options:" in output
     assert "Examples:" in output
+
+
+def test_help_shows_quiet_option():
+    result = subprocess.run(
+        [sys.executable, "sortinfolder.py", "--help"],
+        capture_output=True,
+        text=True,
+        check=True,
+    )
+    output = result.stdout
+    assert "quiet" in output

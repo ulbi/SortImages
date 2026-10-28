@@ -215,6 +215,7 @@ def main():
     epilog = """Examples:
   sortimages /data/photos /data/sorted
   sortimages /data/photos /data/sorted --log DEBUG
+  sortimages /data/photos /data/sorted --quiet
 """
     parser = argparse.ArgumentParser(
         prog="sortimages",
@@ -225,12 +226,16 @@ def main():
     parser.add_argument("basepath", type=str, help="The base path where the images are located.")
     parser.add_argument("output_path", type=str, help="The output path where images will be copied to.")
     parser.add_argument("--log", type=str, default="INFO", help="Set the logging level (DEBUG, INFO, WARNING, ERROR, CRITICAL)")
+    parser.add_argument("-q", "--quiet", dest="quiet", action="store_true", help="Suppress all log messages except warnings and errors.")
     args = parser.parse_args()
 
     # Set up logging level based on the argument
-    numeric_level = getattr(logging, args.log.upper(), None)
-    if not isinstance(numeric_level, int):
-        raise ValueError(f"Invalid log level: {args.log}")
+    if args.quiet:
+        numeric_level = logging.WARNING
+    else:
+        numeric_level = getattr(logging, args.log.upper(), None)
+        if not isinstance(numeric_level, int):
+            raise ValueError(f"Invalid log level: {args.log}")
     setup_logging(numeric_level)
 
     logging.info(f"Script arguments - Basepath: {args.basepath}, Output Path: {args.output_path}")
