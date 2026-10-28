@@ -33,6 +33,20 @@ python image_processor.py [basepath] [output_path] [--log LEVEL]
 - `output_path`: The directory where processed images will be saved.
 - `--log`: (Optional) Set the logging level (`DEBUG`, `INFO`, `WARNING`, `ERROR`, `CRITICAL`). Defaults to `INFO`.
 
+## Testing
+
+Run the test suite with:
+
+```
+python3 test_sortinfolder.py
+```
+
+Verify the module imports correctly with:
+
+```
+python3 -c "import sortinfolder"
+```
+
 ## Functions
 
 - `setup_logging(level)`: Configures the logging system.
