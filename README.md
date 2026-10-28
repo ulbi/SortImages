@@ -28,7 +28,6 @@ This Python script automatically sorts image files into folders based on their c
 python image_processor.py [basepath] [output_path] [--log LEVEL]
 ```
 
-
 - `basepath`: The directory where your images are stored.
 - `output_path`: The directory where processed images will be saved.
 - `--log`: (Optional) Set the logging level (`DEBUG`, `INFO`, `WARNING`, `ERROR`, `CRITICAL`). Defaults to `INFO`.
