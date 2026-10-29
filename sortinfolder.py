@@ -203,6 +203,24 @@ def sort_images(basepath, output_path):
         for future in concurrent.futures.as_completed(futures):
             future.result()  # to catch exceptions
 
+def list_image_extensions(basepath):
+    """
+    Collect the unique lowercase extensions of image files in the given directory.
+
+    Args:
+        basepath (str): The path to the directory to scan (no recursion).
+
+    Returns:
+        list: The sorted list of unique lowercase extensions without the dot.
+    """
+    extensions = set()
+    for entry in os.scandir(basepath):
+        if entry.is_file():
+            ext = os.path.splitext(entry.name)[1].lower().lstrip(".")
+            if ext:
+                extensions.add(ext)
+    return sorted(extensions)
+
 def main():
     """
     Sort and copy images based on date, with automatic rotation and tagging.
@@ -215,6 +233,7 @@ def main():
     epilog = """Examples:
   sortimages /data/photos /data/sorted
   sortimages /data/photos /data/sorted --log DEBUG
+  sortimages --list-extensions /data/photos
 """
     parser = argparse.ArgumentParser(
         prog="sortimages",
@@ -223,9 +242,18 @@ def main():
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
     parser.add_argument("basepath", type=str, help="The base path where the images are located.")
-    parser.add_argument("output_path", type=str, help="The output path where images will be copied to.")
+    parser.add_argument("output_path", type=str, nargs="?", help="The output path where images will be copied to.")
     parser.add_argument("--log", type=str, default="INFO", help="Set the logging level (DEBUG, INFO, WARNING, ERROR, CRITICAL)")
+    parser.add_argument("--list-extensions", action="store_true", help="List the unique lowercase extensions of image files in the given directory and exit.")
     args = parser.parse_args()
+
+    if args.list_extensions:
+        for extension in list_image_extensions(args.basepath):
+            print(extension)
+        return
+
+    if not args.output_path:
+        parser.error("the following arguments are required: output_path")
 
     # Set up logging level based on the argument
     numeric_level = getattr(logging, args.log.upper(), None)
