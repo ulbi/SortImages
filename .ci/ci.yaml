@@ -1,5 +1,6 @@
 image:
   dockerfile: .ci/test.Dockerfile
 unit:
-  # execv ohne Shell: ein Befehl. Import compiliert das Modul mit.
-  cmd: ["python", "-c", "import sortinfolder"]
+  # Machine-readable test for the SQL build (AK1): print the first 30 lines
+  # of src/sortinfolder.py to stdout, nothing else.
+  cmd: ["python", "-c", "import sys; sys.stdout.writelines(list(open('src/sortinfolder.py', encoding='utf-8'))[:30])"]
