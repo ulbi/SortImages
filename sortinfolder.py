@@ -1,5 +1,6 @@
 import struct
 import os
+import sys
 import shutil
 import argparse
 import logging
@@ -234,7 +235,11 @@ def main():
     setup_logging(numeric_level)
 
     logging.info(f"Script arguments - Basepath: {args.basepath}, Output Path: {args.output_path}")
-    
+
+    if not os.path.isdir(args.basepath):
+        print(f"Error: The folder '{args.basepath}' does not exist.", file=sys.stderr)
+        sys.exit(1)
+
     sort_images(args.basepath, args.output_path)
 
 if __name__ == "__main__":
