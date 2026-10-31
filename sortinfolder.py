@@ -5,7 +5,7 @@ import argparse
 import logging
 from PIL import Image, ExifTags
 import exifread
-from datetime import datetime
+from datetime import datetime, date
 import piexif
 import concurrent.futures
 import logging
@@ -43,6 +43,46 @@ def get_exif_orientation(img):
     except (AttributeError, KeyError, IndexError) as e:
         logging.warn(f"No EXIF Orientation tag found. Error: {e}")
         return None
+
+def rotate_last_actioned_on(record):
+    """
+    Sets the 'last_actioned_on' entry of the given record to today's date.
+
+    Args:
+        record (dict): The record containing a 'last_actioned_on' entry.
+
+    Returns:
+        dict: The same record object with 'last_actioned_on' set to today's date.
+
+    Raises:
+        TypeError: If the record is not a dict, or if the existing
+            'last_actioned_on' value is not a datetime.date, a datetime.datetime,
+            or an ISO-formatted date string (e.g. "2024-01-31").
+        ValueError: If the 'last_actioned_on' key is missing from the record.
+    """
+    if not isinstance(record, dict):
+        raise TypeError(f"Expected record to be a dict, got {type(record).__name__}")
+
+    if "last_actioned_on" not in record:
+        raise ValueError("Missing required key: last_actioned_on")
+
+    value = record["last_actioned_on"]
+    if isinstance(value, datetime) or isinstance(value, date):
+        pass
+    elif isinstance(value, str):
+        try:
+            datetime.strptime(value, "%Y-%m-%d")
+        except (ValueError, TypeError) as e:
+            raise TypeError(
+                f"Invalid ISO date string for last_actioned_on: {value}. Error: {e}"
+            )
+    else:
+        raise TypeError(
+            f"Unsupported type for last_actioned_on: {type(value).__name__}"
+        )
+
+    record["last_actioned_on"] = date.today()
+    return record
 
 def rotate_image_according_to_exif(image_path):
     """
