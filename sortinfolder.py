@@ -44,6 +44,27 @@ def get_exif_orientation(img):
         logging.warn(f"No EXIF Orientation tag found. Error: {e}")
         return None
 
+def trim_sort_folder_name(folder_name):
+    """
+    Trim leading and trailing whitespace from a sort folder name.
+
+    Args:
+        folder_name (str): The folder name to trim.
+
+    Returns:
+        str: The folder name with leading and trailing whitespace removed.
+
+    Raises:
+        TypeError: If folder_name is not a string.
+        ValueError: If the trimmed folder name is empty.
+    """
+    if not isinstance(folder_name, str):
+        raise TypeError(f"folder_name must be a str, got {type(folder_name).__name__}")
+    trimmed = folder_name.strip()
+    if not trimmed:
+        raise ValueError("folder_name must not be empty or whitespace-only")
+    return trimmed
+
 def rotate_image_according_to_exif(image_path):
     """
     Rotates the image based on the EXIF orientation tag.
