@@ -3,12 +3,57 @@ import os
 import shutil
 import argparse
 import logging
+import re
+import unicodedata
 from PIL import Image, ExifTags
 import exifread
 from datetime import datetime
 import piexif
 import concurrent.futures
 import logging
+
+
+def slugify(text: str) -> str:
+    """
+    Convert text to a URL-friendly slug.
+
+    Transliterates German umlauts and other special characters,
+    removes non-alphanumeric characters, and converts to lowercase
+    with hyphens as separators.
+
+    Args:
+        text: The input text to slugify.
+
+    Returns:
+        A URL-friendly slug string.
+    """
+    if not text:
+        return ""
+
+    # Transliterate German umlauts and sharp S
+    replacements = {
+        'ä': 'ae', 'ö': 'oe', 'ü': 'ue',
+        'Ä': 'ae', 'Ö': 'oe', 'Ü': 'ue',
+        'ß': 'ss',
+    }
+    for char, replacement in replacements.items():
+        text = text.replace(char, replacement)
+
+    # Normalize unicode characters (e.g., accented characters)
+    text = unicodedata.normalize('NFKD', text)
+    text = text.encode('ascii', 'ignore').decode('ascii')
+
+    # Convert to lowercase
+    text = text.lower()
+
+    # Replace non-alphanumeric characters with hyphens
+    text = re.sub(r'[^a-z0-9]+', '-', text)
+
+    # Strip leading and trailing hyphens
+    text = text.strip('-')
+
+    return text
+
 
 def setup_logging(level):
     """
