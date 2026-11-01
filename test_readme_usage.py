@@ -1,4 +1,3 @@
-import pytest
 from sortinfolder import SUPPORTED_FORMATS
 
 
