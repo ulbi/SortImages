@@ -172,7 +172,19 @@ def process_image(file_path, basepath, output_path):
         os.makedirs(new_folder)
         logging.info(f"Created directory for date: {new_folder}")
 
-    new_file_path = os.path.join(new_folder, os.path.basename(file_path))
+    # Generate unique filename if destination already exists
+    base_name = os.path.basename(file_path)
+    name, ext = os.path.splitext(base_name)
+    new_file_path = os.path.join(new_folder, base_name)
+
+    counter = 1
+    while os.path.exists(new_file_path):
+        new_name = f"{name}_{counter}{ext}"
+        new_file_path = os.path.join(new_folder, new_name)
+        counter += 1
+
+    if counter > 1:
+        logging.info(f"Filename collision detected for {base_name}, using {os.path.basename(new_file_path)}")
 
     # Copying the image
     shutil.copy2(file_path, new_file_path)
