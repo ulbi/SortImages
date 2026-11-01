@@ -323,6 +323,77 @@ def test_error_summary_and_exit_code():
         print("test_error_summary_and_exit_code passed!")
 
 
+def test_cli_exit_code_end_to_end():
+    """Test CLI end-to-end: subprocess with corrupted file returns exit code 1,
+    subprocess with only valid files returns exit code 0."""
+    with tempfile.TemporaryDirectory() as tmpdir:
+        # Test 1: CLI with corrupted file -> exit code 1, error summary in output
+        basepath1 = os.path.join(tmpdir, "source1")
+        output_path1 = os.path.join(tmpdir, "output1")
+        os.makedirs(basepath1)
+
+        test_date = "2024:06:15 10:30:00"
+        valid_file = os.path.join(basepath1, "valid.jpg")
+        img = Image.new('RGB', (100, 100), color='red')
+        exif_dict = {
+            "0th": {},
+            "Exif": {piexif.ExifIFD.DateTimeOriginal: test_date},
+            "GPS": {}, "1st": {}, "thumbnail": None
+        }
+        exif_bytes = piexif.dump(exif_dict)
+        img.save(valid_file, "JPEG", exif=exif_bytes)
+
+        corrupted_file = os.path.join(basepath1, "corrupted.jpg")
+        with open(corrupted_file, 'wb') as f:
+            f.write(b"This is not a valid image file")
+
+        result = subprocess.run(
+            [sys.executable, "sortinfolder.py", basepath1, output_path1],
+            capture_output=True,
+            text=True,
+        )
+
+        combined_output = result.stdout + result.stderr
+        print(f"Test 1 (with corruption) - exit code: {result.returncode}")
+        print(f"Test 1 stdout: {result.stdout}")
+        print(f"Test 1 stderr: {result.stderr}")
+
+        assert result.returncode == 1, f"Expected exit code 1 for corrupted file, got {result.returncode}"
+        assert "Failed: 1" in combined_output, f"Expected 'Failed: 1' in output. Got: {combined_output}"
+        assert "Processed: 2" in combined_output, f"Expected 'Processed: 2' in output. Got: {combined_output}"
+
+        # Test 2: CLI with only valid files -> exit code 0
+        basepath2 = os.path.join(tmpdir, "source2")
+        output_path2 = os.path.join(tmpdir, "output2")
+        os.makedirs(basepath2)
+
+        valid_file2 = os.path.join(basepath2, "valid2.jpg")
+        img2 = Image.new('RGB', (100, 100), color='blue')
+        exif_bytes2 = piexif.dump(exif_dict)
+        img2.save(valid_file2, "JPEG", exif=exif_bytes2)
+
+        result2 = subprocess.run(
+            [sys.executable, "sortinfolder.py", basepath2, output_path2],
+            capture_output=True,
+            text=True,
+        )
+
+        combined_output2 = result2.stdout + result2.stderr
+        print(f"Test 2 (valid only) - exit code: {result2.returncode}")
+        print(f"Test 2 stdout: {result2.stdout}")
+        print(f"Test 2 stderr: {result2.stderr}")
+
+        assert result2.returncode == 0, f"Expected exit code 0 for valid files only, got {result2.returncode}"
+        assert "Failed: 0" in combined_output2, f"Expected 'Failed: 0' in output. Got: {combined_output2}"
+        assert "Processed: 1" in combined_output2, f"Expected 'Processed: 1' in output. Got: {combined_output2}"
+
+        # Verify the valid image was copied
+        expected_folder = os.path.join(output_path2, "2024/06/15")
+        assert os.path.exists(os.path.join(expected_folder, "valid2.jpg")), "Valid image should be copied"
+
+        print("test_cli_exit_code_end_to_end passed!")
+
+
 if __name__ == "__main__":
     test_help_shows_usage_and_examples()
     print("test_help_shows_usage_and_examples passed")
