@@ -245,6 +245,84 @@ def test_cli_invalid_threads_value():
     print("test_cli_invalid_threads_value passed!")
 
 
+def test_error_summary_and_exit_code():
+    """Test that errors are collected and non-zero exit code is returned on failure."""
+    import io
+    import sys
+    import logging
+    from sortinfolder import sort_images, setup_logging
+
+    with tempfile.TemporaryDirectory() as tmpdir:
+        basepath = os.path.join(tmpdir, "source")
+        output_path = os.path.join(tmpdir, "output")
+        os.makedirs(basepath)
+
+        # Create a valid image with EXIF date
+        test_date = "2024:06:15 10:30:00"
+        valid_file = os.path.join(basepath, "valid.jpg")
+        img = Image.new('RGB', (100, 100), color='red')
+        exif_dict = {
+            "0th": {},
+            "Exif": {
+                piexif.ExifIFD.DateTimeOriginal: test_date,
+            },
+            "GPS": {},
+            "1st": {},
+            "thumbnail": None
+        }
+        exif_bytes = piexif.dump(exif_dict)
+        img.save(valid_file, "JPEG", exif=exif_bytes)
+
+        # Create a corrupted/truncated image file (not a valid image)
+        # This will cause an error when trying to process it
+        corrupted_file = os.path.join(basepath, "corrupted.jpg")
+        with open(corrupted_file, 'wb') as f:
+            f.write(b"This is not a valid image file")
+
+        # Set up logging to capture output using a custom handler
+        log_capture = io.StringIO()
+        handler = logging.StreamHandler(log_capture)
+        handler.setFormatter(logging.Formatter('%(asctime)s - [Thread %(thread)d] - %(levelname)s - %(message)s'))
+
+        # Reset root logger
+        root_logger = logging.getLogger()
+        root_logger.handlers.clear()
+        root_logger.addHandler(handler)
+        root_logger.setLevel(logging.INFO)
+
+        # sort_images should return (success_count, failure_count, errors_list)
+        result = sort_images(basepath, output_path, threads=2, dry_run=False)
+
+        # Check return value structure
+        assert isinstance(result, tuple), "sort_images should return a tuple"
+        assert len(result) == 3, "sort_images should return (success_count, failure_count, errors_list)"
+        success_count, failure_count, errors_list = result
+
+        # Check counts
+        assert success_count == 1, f"Expected 1 success, got {success_count}"
+        assert failure_count == 1, f"Expected 1 failure, got {failure_count}"
+        assert len(errors_list) == 1, f"Expected 1 error in list, got {len(errors_list)}"
+
+        # Check error details
+        error = errors_list[0]
+        assert "file" in error, "Error should contain file path"
+        assert "type" in error, "Error should contain error type"
+        assert "message" in error, "Error should contain error message"
+        assert "corrupted.jpg" in error["file"], "Error should reference corrupted file"
+
+        # Check log output contains summary
+        combined_output = log_capture.getvalue()
+        assert "Processed: 2" in combined_output, f"Expected 'Processed: 2' in output. Got: {combined_output}"
+        assert "Succeeded: 1" in combined_output, f"Expected 'Succeeded: 1' in output. Got: {combined_output}"
+        assert "Failed: 1" in combined_output, f"Expected 'Failed: 1' in output. Got: {combined_output}"
+
+        # Verify valid image was still processed
+        expected_folder = os.path.join(output_path, "2024/06/15")
+        assert os.path.exists(os.path.join(expected_folder, "valid.jpg")), "Valid image should be processed despite error"
+
+        print("test_error_summary_and_exit_code passed!")
+
+
 if __name__ == "__main__":
     test_help_shows_usage_and_examples()
     print("test_help_shows_usage_and_examples passed")
@@ -260,3 +338,6 @@ if __name__ == "__main__":
 
     test_cli_invalid_threads_value()
     print("test_cli_invalid_threads_value passed")
+
+    test_error_summary_and_exit_code()
+    print("test_error_summary_and_exit_code passed")
