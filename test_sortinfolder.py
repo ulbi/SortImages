@@ -72,11 +72,17 @@ def test_process_image_supports_multiple_formats():
         process_image(png_path, basepath, output_path)
         process_image(tiff_path, basepath, output_path)
 
-        # Verify all files were copied to correct date folder
+        # JPG and TIFF with EXIF date go to the expected date folder
         expected_folder = os.path.join(output_path, "2024/06/15")
         assert os.path.exists(os.path.join(expected_folder, "test.jpg")), "JPG not copied"
-        assert os.path.exists(os.path.join(expected_folder, "test.png")), "PNG not copied"
         assert os.path.exists(os.path.join(expected_folder, "test.tiff")), "TIFF not copied"
+
+        # PNG has no EXIF - falls back to file creation date, but must be copied
+        copied_files = []
+        for root, dirs, files in os.walk(output_path):
+            for f in files:
+                copied_files.append(f)
+        assert "test.png" in copied_files, "PNG not copied"
 
         # Verify JPG has RelativePath tag in EXIF UserComment
         jpg_output = os.path.join(expected_folder, "test.jpg")
@@ -84,12 +90,7 @@ def test_process_image_supports_multiple_formats():
         user_comment = exif_data["Exif"].get(piexif.ExifIFD.UserComment, b'')
         assert b"RelativePath:" in user_comment, "JPG should have RelativePath tag"
 
-        # Verify PNG does NOT have RelativePath tag (but was copied)
-        png_output = os.path.join(expected_folder, "test.png")
-        # PNG doesn't support EXIF in same way - just verify it exists
-        assert os.path.exists(png_output), "PNG should exist"
-
-        # Verify TIFF does NOT have RelativePath tag (but was copied)
+        # Verify TIFF was copied but does NOT have RelativePath tag
         tiff_output = os.path.join(expected_folder, "test.tiff")
         assert os.path.exists(tiff_output), "TIFF should exist"
 

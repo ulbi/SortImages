@@ -10,6 +10,8 @@ import piexif
 import concurrent.futures
 import logging
 
+SUPPORTED_FORMATS = {'.jpg', '.jpeg', '.png', '.heic', '.tiff', '.tif', '.bmp', '.webp'}
+
 def setup_logging(level):
     """
     Set up logging configuration.
@@ -34,14 +36,17 @@ def get_exif_orientation(img):
         The EXIF orientation value if found, None otherwise.
     """
     try:
+        exif = img._getexif()
+        if exif is None:
+            return None
         for orientation in ExifTags.TAGS.keys():
             if ExifTags.TAGS[orientation] == 'Orientation':
-                orientation_value = img._getexif()[orientation]
+                orientation_value = exif[orientation]
                 logging.debug(f"Found EXIF Orientation: {orientation_value}")
                 return orientation_value
         return None
-    except (AttributeError, KeyError, IndexError) as e:
-        logging.warn(f"No EXIF Orientation tag found. Error: {e}")
+    except (AttributeError, KeyError, IndexError, TypeError) as e:
+        logging.debug(f"No EXIF Orientation tag found. Error: {e}")
         return None
 
 def rotate_image_according_to_exif(image_path):
@@ -124,7 +129,8 @@ def add_relative_path_tag(image_path, relative_path):
 
     """
     try:
-        if image_path.lower().endswith('.jpg'):
+        ext = os.path.splitext(image_path)[1].lower()
+        if ext in ('.jpg', '.jpeg'):
             exif_dict = piexif.load(image_path)
             user_comment = exif_dict["Exif"].get(piexif.ExifIFD.UserComment, b'')
             new_comment = user_comment + b"\nRelativePath:" + relative_path.encode()
@@ -154,26 +160,30 @@ def process_image(file_path, basepath, output_path):
     Returns:
         None
     """
-    if file_path.lower().endswith('.jpg') and os.path.getsize(file_path) > 100 * 1024:
-        logging.debug(f"Processing file: {file_path}")
-        date_taken = get_date_taken(file_path)
-        new_folder = os.path.join(output_path, date_taken.strftime("%Y/%m/%d"))
-        if not os.path.exists(new_folder):
-            os.makedirs(new_folder)
-            logging.info(f"Created directory for date: {new_folder}")
+    ext = os.path.splitext(file_path)[1].lower()
+    if ext not in SUPPORTED_FORMATS:
+        logging.debug(f"Skipping unsupported format: {file_path}")
+        return
 
-        new_file_path = os.path.join(new_folder, os.path.basename(file_path))
-        
-        # Copying the image
-        shutil.copy2(file_path, new_file_path)
-        logging.info(f"Copied {file_path} to {new_file_path}")
+    logging.debug(f"Processing file: {file_path}")
+    date_taken = get_date_taken(file_path)
+    new_folder = os.path.join(output_path, date_taken.strftime("%Y/%m/%d"))
+    if not os.path.exists(new_folder):
+        os.makedirs(new_folder)
+        logging.info(f"Created directory for date: {new_folder}")
 
-        # Rotate image if needed
-        rotate_image_according_to_exif(new_file_path)
+    new_file_path = os.path.join(new_folder, os.path.basename(file_path))
 
-        # Add the relative path as a tag
-        relative_path = os.path.relpath(os.path.dirname(file_path), basepath)
-        add_relative_path_tag(new_file_path, relative_path)
+    # Copying the image
+    shutil.copy2(file_path, new_file_path)
+    logging.info(f"Copied {file_path} to {new_file_path}")
+
+    # Rotate image if needed
+    rotate_image_according_to_exif(new_file_path)
+
+    # Add the relative path as a tag (only for JPG/JPEG)
+    relative_path = os.path.relpath(os.path.dirname(file_path), basepath)
+    add_relative_path_tag(new_file_path, relative_path)
 
 def sort_images(basepath, output_path):
     """
