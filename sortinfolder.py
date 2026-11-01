@@ -3,12 +3,12 @@ import os
 import shutil
 import argparse
 import logging
+import sys
 from PIL import Image, ExifTags
 import exifread
 from datetime import datetime
 import piexif
 import concurrent.futures
-import logging
 
 SUPPORTED_FORMATS = {'.jpg', '.jpeg', '.png', '.heic', '.tiff', '.tif', '.bmp', '.webp'}
 
@@ -84,8 +84,12 @@ def rotate_image_according_to_exif(image_path):
 
             if orientation in [3, 6, 8]:
                 img.save(image_path)
+    except OSError:
+        # Re-raise OSError (e.g., cannot identify image file)
+        raise
     except Exception as e:
         logging.error(f"Error in rotating image {image_path}: {e}")
+        raise
 
 def get_date_taken(path):
     """
@@ -142,10 +146,12 @@ def add_relative_path_tag(image_path, relative_path):
                 logging.debug(f"Added original relative path to EXIF UserComment in {image_path}")
             except struct.error as e:
                 logging.error(f"Struct error while processing EXIF data in {image_path}: {e}")
+                raise
         else:
             logging.info(f"File format not supported for tagging: {image_path}")
     except Exception as e:
         logging.error(f"Error adding tag to file {image_path}: {e}")
+        raise
 
 def process_image(file_path, basepath, output_path, dry_run=False):
     """
@@ -231,7 +237,7 @@ def sort_images(basepath, output_path, threads=30, dry_run=False):
         dry_run (bool): If True, simulate processing without copying files. Default: False.
 
     Returns:
-        None
+        tuple: (success_count, failure_count, errors_list)
     """
     if not 1 <= threads <= 100:
         raise ValueError(f"threads must be between 1 and 100, got {threads}")
@@ -249,11 +255,32 @@ def sort_images(basepath, output_path, threads=30, dry_run=False):
         for file in files:
             files_to_process.append(os.path.join(root, file))
 
+    success_count = 0
+    failure_count = 0
+    errors_list = []
+
     # Process files in parallel using a ThreadPool
     with concurrent.futures.ThreadPoolExecutor(max_workers=threads) as executor:
-        futures = [executor.submit(process_image, file_path, basepath, output_path, dry_run) for file_path in files_to_process]
+        futures = {executor.submit(process_image, file_path, basepath, output_path, dry_run): file_path for file_path in files_to_process}
         for future in concurrent.futures.as_completed(futures):
-            future.result()  # to catch exceptions
+            file_path = futures[future]
+            try:
+                future.result()
+                success_count += 1
+            except Exception as e:
+                failure_count += 1
+                error_info = {
+                    "file": file_path,
+                    "type": type(e).__name__,
+                    "message": str(e)
+                }
+                errors_list.append(error_info)
+                logging.error(f"Failed to process {file_path}: {type(e).__name__}: {e}")
+
+    total_processed = success_count + failure_count
+    logging.info(f"Processed: {total_processed}, Succeeded: {success_count}, Failed: {failure_count}")
+
+    return success_count, failure_count, errors_list
 
 def main():
     """
@@ -290,7 +317,10 @@ def main():
 
     logging.info(f"Script arguments - Basepath: {args.basepath}, Output Path: {args.output_path}, Threads: {args.threads}, Dry-run: {args.dry_run}")
 
-    sort_images(args.basepath, args.output_path, threads=args.threads, dry_run=args.dry_run)
+    success_count, failure_count, errors_list = sort_images(args.basepath, args.output_path, threads=args.threads, dry_run=args.dry_run)
+
+    if failure_count > 0:
+        sys.exit(1)
 
 if __name__ == "__main__":
     main()
