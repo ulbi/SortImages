@@ -168,6 +168,81 @@ def test_process_image_supports_multiple_formats():
         print("All format tests passed!")
 
 
+def test_cli_threads_and_dry_run():
+    """Test CLI options for configurable thread count and dry-run mode."""
+    with tempfile.TemporaryDirectory() as tmpdir:
+        basepath = os.path.join(tmpdir, "source")
+        output_path = os.path.join(tmpdir, "output")
+        os.makedirs(basepath)
+
+        # Create a test image
+        test_date = "2024:06:15 10:30:00"
+        file_path = os.path.join(basepath, "test.jpg")
+        img = Image.new('RGB', (100, 100), color='red')
+        exif_dict = {
+            "0th": {},
+            "Exif": {
+                piexif.ExifIFD.DateTimeOriginal: test_date,
+            },
+            "GPS": {},
+            "1st": {},
+            "thumbnail": None
+        }
+        exif_bytes = piexif.dump(exif_dict)
+        img.save(file_path, "JPEG", exif=exif_bytes)
+
+        # Run with --threads 5 --dry-run
+        result = subprocess.run(
+            [sys.executable, "sortinfolder.py", basepath, output_path, "--threads", "5", "--dry-run"],
+            capture_output=True,
+            text=True,
+        )
+
+        # Combine stdout and stderr for checking (logging goes to stderr)
+        combined_output = result.stdout + result.stderr
+
+        # Check exit code is 0
+        assert result.returncode == 0, f"Expected exit code 0, got {result.returncode}. stderr: {result.stderr}"
+
+        # Check output contains DRY RUN indication
+        assert "DRY RUN" in combined_output, \
+            f"Expected DRY RUN message in output. Got stdout: {result.stdout}, stderr: {result.stderr}"
+
+        # Check output path does not exist or is empty (no files copied)
+        if os.path.exists(output_path):
+            files_in_output = []
+            for root, dirs, files in os.walk(output_path):
+                files_in_output.extend(files)
+            assert len(files_in_output) == 0, f"Expected no files copied in dry-run, but found: {files_in_output}"
+
+        # Check log shows what would happen (target paths, rotation, tags)
+        assert "2024/06/15" in combined_output, f"Expected target date folder in dry-run output. Got: {combined_output}"
+        assert "test.jpg" in combined_output, f"Expected filename in dry-run output. Got: {combined_output}"
+
+        print("test_cli_threads_and_dry_run passed!")
+
+
+def test_cli_invalid_threads_value():
+    """Test that invalid thread values are rejected."""
+    result = subprocess.run(
+        [sys.executable, "sortinfolder.py", "/tmp", "/tmp/out", "--threads", "0"],
+        capture_output=True,
+        text=True,
+    )
+    assert result.returncode != 0, "Expected non-zero exit code for threads=0"
+    assert "threads" in result.stderr.lower() or "thread" in result.stderr.lower()
+
+    result = subprocess.run(
+        [sys.executable, "sortinfolder.py", "/tmp", "/tmp/out", "--threads", "101"],
+        capture_output=True,
+        text=True,
+    )
+    assert result.returncode != 0, "Expected non-zero exit code for threads=101"
+    assert "threads" in result.stderr.lower() or "thread" in result.stderr.lower()
+
+    print("test_cli_invalid_threads_value passed!")
+
+
 if __name__ == "__main__":
     test_help_shows_usage_and_examples()
     print("test_help_shows_usage_and_examples passed")
@@ -177,3 +252,9 @@ if __name__ == "__main__":
 
     test_process_image_supports_multiple_formats()
     print("test_process_image_supports_multiple_formats passed")
+
+    test_cli_threads_and_dry_run()
+    print("test_cli_threads_and_dry_run passed")
+
+    test_cli_invalid_threads_value()
+    print("test_cli_invalid_threads_value passed")
