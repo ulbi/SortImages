@@ -1,16 +1,19 @@
-import struct
+import argparse
+import concurrent.futures
+import logging
 import os
 import shutil
-import argparse
-import logging
+import struct
 import sys
-from PIL import Image, ExifTags
-import exifread
 from datetime import datetime
+
+import exifread
 import piexif
-import concurrent.futures
+from PIL import ExifTags, Image, UnidentifiedImageError
 
 SUPPORTED_FORMATS = {'.jpg', '.jpeg', '.png', '.heic', '.tiff', '.tif', '.bmp', '.webp'}
+
+logger = logging.getLogger(__name__)
 
 def setup_logging(level):
     """
@@ -39,14 +42,14 @@ def get_exif_orientation(img):
         exif = img._getexif()
         if exif is None:
             return None
-        for orientation in ExifTags.TAGS.keys():
+        for orientation in ExifTags.TAGS:
             if ExifTags.TAGS[orientation] == 'Orientation':
                 orientation_value = exif[orientation]
-                logging.debug(f"Found EXIF Orientation: {orientation_value}")
+                logger.debug(f"Found EXIF Orientation: {orientation_value}")
                 return orientation_value
         return None
     except (AttributeError, KeyError, IndexError, TypeError) as e:
-        logging.debug(f"No EXIF Orientation tag found. Error: {e}")
+        logger.debug(f"No EXIF Orientation tag found. Error: {e}")
         return None
 
 def rotate_image_according_to_exif(image_path):
@@ -62,33 +65,31 @@ def rotate_image_according_to_exif(image_path):
     """
     try:
         with Image.open(image_path) as img:
-            # Attempt to load the image to check for truncation
             try:
                 img.load()
             except OSError as e:
-                logging.error(f"Image file is truncated: {image_path}. Error: {e}")
-                return  # Skip processing this image
+                logger.error(f"Image file is truncated: {image_path}. Error: {e}")
+                return
 
             orientation = get_exif_orientation(img)
             if orientation == 3:
                 img = img.rotate(180, expand=True)
-                logging.debug(f"Image rotated 180 degrees: {image_path}")
+                logger.debug(f"Image rotated 180 degrees: {image_path}")
             elif orientation == 6:
                 img = img.rotate(270, expand=True)
-                logging.debug(f"Image rotated 270 degrees: {image_path}")
+                logger.debug(f"Image rotated 270 degrees: {image_path}")
             elif orientation == 8:
                 img = img.rotate(90, expand=True)
-                logging.debug(f"Image rotated 90 degrees: {image_path}")
+                logger.debug(f"Image rotated 90 degrees: {image_path}")
             else:
-                logging.debug(f"No rotation required for image: {image_path}")
+                logger.debug(f"No rotation required for image: {image_path}")
 
             if orientation in [3, 6, 8]:
                 img.save(image_path)
     except OSError:
-        # Re-raise OSError (e.g., cannot identify image file)
         raise
-    except Exception as e:
-        logging.error(f"Error in rotating image {image_path}: {e}")
+    except (UnidentifiedImageError, struct.error) as e:
+        logger.error(f"Error in rotating image {image_path}: {e}")
         raise
 
 def get_date_taken(path):
@@ -111,13 +112,13 @@ def get_date_taken(path):
             tags = exifread.process_file(f, stop_tag="EXIF DateTimeOriginal")
             if "EXIF DateTimeOriginal" in tags:
                 date_str = str(tags["EXIF DateTimeOriginal"])
-                logging.debug(f"Extracted date from EXIF data: {date_str}")
+                logger.debug(f"Extracted date from EXIF data: {date_str}")
                 return datetime.strptime(date_str, '%Y:%m:%d %H:%M:%S')
             else:
                 raise KeyError
-    except Exception:
+    except (OSError, KeyError, ValueError):
         ctime = datetime.fromtimestamp(os.path.getctime(path))
-        logging.warning(f"EXIF DateTimeOriginal not found in {path}. Using file creation date: {ctime}")
+        logger.warning(f"EXIF DateTimeOriginal not found in {path}. Using file creation date: {ctime}")
         return ctime
 
 def add_relative_path_tag(image_path, relative_path):
@@ -129,8 +130,7 @@ def add_relative_path_tag(image_path, relative_path):
         relative_path (str): The relative path to be added as a tag.
 
     Raises:
-        Exception: If an error occurs while adding the tag.
-
+        OSError: If an error occurs while adding the tag.
     """
     try:
         ext = os.path.splitext(image_path)[1].lower()
@@ -143,14 +143,14 @@ def add_relative_path_tag(image_path, relative_path):
             try:
                 exif_bytes = piexif.dump(exif_dict)
                 piexif.insert(exif_bytes, image_path)
-                logging.debug(f"Added original relative path to EXIF UserComment in {image_path}")
+                logger.debug(f"Added original relative path to EXIF UserComment in {image_path}")
             except struct.error as e:
-                logging.error(f"Struct error while processing EXIF data in {image_path}: {e}")
+                logger.error(f"Struct error while processing EXIF data in {image_path}: {e}")
                 raise
         else:
-            logging.info(f"File format not supported for tagging: {image_path}")
-    except Exception as e:
-        logging.error(f"Error adding tag to file {image_path}: {e}")
+            logger.info(f"File format not supported for tagging: {image_path}")
+    except (OSError, piexif.InvalidImageDataError) as e:
+        logger.error(f"Error adding tag to file {image_path}: {e}")
         raise
 
 def process_image(file_path, basepath, output_path, dry_run=False):
@@ -169,17 +169,16 @@ def process_image(file_path, basepath, output_path, dry_run=False):
     """
     ext = os.path.splitext(file_path)[1].lower()
     if ext not in SUPPORTED_FORMATS:
-        logging.debug(f"Skipping unsupported format: {file_path}")
+        logger.debug(f"Skipping unsupported format: {file_path}")
         return
 
-    logging.debug(f"Processing file: {file_path}")
+    logger.debug(f"Processing file: {file_path}")
     date_taken = get_date_taken(file_path)
     new_folder = os.path.join(output_path, date_taken.strftime("%Y/%m/%d"))
     if not dry_run and not os.path.exists(new_folder):
         os.makedirs(new_folder)
-        logging.info(f"Created directory for date: {new_folder}")
+        logger.info(f"Created directory for date: {new_folder}")
 
-    # Generate unique filename if destination already exists
     base_name = os.path.basename(file_path)
     name, ext = os.path.splitext(base_name)
     new_file_path = os.path.join(new_folder, base_name)
@@ -191,38 +190,33 @@ def process_image(file_path, basepath, output_path, dry_run=False):
         counter += 1
 
     if counter > 1:
-        logging.info(f"Filename collision detected for {base_name}, using {os.path.basename(new_file_path)}")
+        logger.info(f"Filename collision detected for {base_name}, using {os.path.basename(new_file_path)}")
 
     if dry_run:
-        logging.info(f"DRY RUN: Would copy {file_path} to {new_file_path}")
-        # Check what EXIF rotation would be applied
+        logger.info(f"DRY RUN: Would copy {file_path} to {new_file_path}")
         try:
             with Image.open(file_path) as img:
                 orientation = get_exif_orientation(img)
                 if orientation in [3, 6, 8]:
                     angle = {3: 180, 6: 270, 8: 90}[orientation]
-                    logging.info(f"DRY RUN: Would rotate image {new_file_path} by {angle} degrees")
+                    logger.info(f"DRY RUN: Would rotate image {new_file_path} by {angle} degrees")
                 else:
-                    logging.info(f"DRY RUN: No rotation needed for {new_file_path}")
-        except Exception as e:
-            logging.warning(f"DRY RUN: Could not check rotation for {file_path}: {e}")
-        # Check what tag would be set
+                    logger.info(f"DRY RUN: No rotation needed for {new_file_path}")
+        except (OSError, UnidentifiedImageError) as e:
+            logger.warning(f"DRY RUN: Could not check rotation for {file_path}: {e}")
         ext_check = os.path.splitext(new_file_path)[1].lower()
         if ext_check in ('.jpg', '.jpeg'):
             relative_path = os.path.relpath(os.path.dirname(file_path), basepath)
-            logging.info(f"DRY RUN: Would add RelativePath tag: RelativePath:{relative_path} to {new_file_path}")
+            logger.info(f"DRY RUN: Would add RelativePath tag: RelativePath:{relative_path} to {new_file_path}")
         else:
-            logging.info(f"DRY RUN: Would skip tag for {new_file_path} (format not supported for tagging)")
+            logger.info(f"DRY RUN: Would skip tag for {new_file_path} (format not supported for tagging)")
         return
 
-    # Copying the image
     shutil.copy2(file_path, new_file_path)
-    logging.info(f"Copied {file_path} to {new_file_path}")
+    logger.info(f"Copied {file_path} to {new_file_path}")
 
-    # Rotate image if needed
     rotate_image_according_to_exif(new_file_path)
 
-    # Add the relative path as a tag (only for JPG/JPEG)
     relative_path = os.path.relpath(os.path.dirname(file_path), basepath)
     add_relative_path_tag(new_file_path, relative_path)
 
@@ -244,12 +238,11 @@ def sort_images(basepath, output_path, threads=30, dry_run=False):
 
     if not os.path.exists(output_path):
         os.makedirs(output_path)
-        logging.info(f"Created output directory: {output_path}")
+        logger.info(f"Created output directory: {output_path}")
 
     if dry_run:
-        logging.info("DRY RUN MODE - Simulating processing without copying files")
+        logger.info("DRY RUN MODE - Simulating processing without copying files")
 
-    # List all files to process
     files_to_process = []
     for root, dirs, files in os.walk(basepath):
         for file in files:
@@ -259,7 +252,6 @@ def sort_images(basepath, output_path, threads=30, dry_run=False):
     failure_count = 0
     errors_list = []
 
-    # Process files in parallel using a ThreadPool
     with concurrent.futures.ThreadPoolExecutor(max_workers=threads) as executor:
         futures = {executor.submit(process_image, file_path, basepath, output_path, dry_run): file_path for file_path in files_to_process}
         for future in concurrent.futures.as_completed(futures):
@@ -267,7 +259,7 @@ def sort_images(basepath, output_path, threads=30, dry_run=False):
             try:
                 future.result()
                 success_count += 1
-            except Exception as e:
+            except Exception as e:  # noqa: BLE001 - Catch all exceptions from worker threads to collect errors
                 failure_count += 1
                 error_info = {
                     "file": file_path,
@@ -275,10 +267,10 @@ def sort_images(basepath, output_path, threads=30, dry_run=False):
                     "message": str(e)
                 }
                 errors_list.append(error_info)
-                logging.error(f"Failed to process {file_path}: {type(e).__name__}: {e}")
+                logger.error(f"Failed to process {file_path}: {type(e).__name__}: {e}")
 
     total_processed = success_count + failure_count
-    logging.info(f"Processed: {total_processed}, Succeeded: {success_count}, Failed: {failure_count}")
+    logger.info(f"Processed: {total_processed}, Succeeded: {success_count}, Failed: {failure_count}")
 
     return success_count, failure_count, errors_list
 
@@ -309,15 +301,14 @@ def main():
     parser.add_argument("--dry-run", action="store_true", help="Simulate processing without copying files")
     args = parser.parse_args()
 
-    # Set up logging level based on the argument
     numeric_level = getattr(logging, args.log.upper(), None)
     if not isinstance(numeric_level, int):
-        raise ValueError(f"Invalid log level: {args.log}")
+        raise TypeError(f"Invalid log level: {args.log}")
     setup_logging(numeric_level)
 
-    logging.info(f"Script arguments - Basepath: {args.basepath}, Output Path: {args.output_path}, Threads: {args.threads}, Dry-run: {args.dry_run}")
+    logger.info(f"Script arguments - Basepath: {args.basepath}, Output Path: {args.output_path}, Threads: {args.threads}, Dry-run: {args.dry_run}")
 
-    success_count, failure_count, errors_list = sort_images(args.basepath, args.output_path, threads=args.threads, dry_run=args.dry_run)
+    _success_count, failure_count, _errors_list = sort_images(args.basepath, args.output_path, threads=args.threads, dry_run=args.dry_run)
 
     if failure_count > 0:
         sys.exit(1)

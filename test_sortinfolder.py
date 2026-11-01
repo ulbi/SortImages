@@ -1,11 +1,11 @@
+import hashlib
+import os
 import subprocess
 import sys
-import os
 import tempfile
-import shutil
-import hashlib
-from PIL import Image
+
 import piexif
+from PIL import Image
 
 
 def test_help_shows_usage_and_examples():
@@ -93,7 +93,7 @@ def test_process_image_handles_duplicate_filenames():
 
 def test_process_image_supports_multiple_formats():
     """Test that process_image supports JPG, PNG, TIFF formats."""
-    from sortinfolder import process_image, get_date_taken, add_relative_path_tag
+    from sortinfolder import process_image
 
     with tempfile.TemporaryDirectory() as tmpdir:
         basepath = os.path.join(tmpdir, "source")
@@ -101,7 +101,6 @@ def test_process_image_supports_multiple_formats():
         os.makedirs(basepath)
 
         # Create test images in different formats
-        test_date = (2024, 6, 15, 10, 30, 0)
 
         # Create JPG with EXIF date
         jpg_path = os.path.join(basepath, "test.jpg")
@@ -149,10 +148,7 @@ def test_process_image_supports_multiple_formats():
         assert os.path.exists(os.path.join(expected_folder, "test.tiff")), "TIFF not copied"
 
         # PNG has no EXIF - falls back to file creation date, but must be copied
-        copied_files = []
-        for root, dirs, files in os.walk(output_path):
-            for f in files:
-                copied_files.append(f)
+        copied_files = [f for root, dirs, files in os.walk(output_path) for f in files]
         assert "test.png" in copied_files, "PNG not copied"
 
         # Verify JPG has RelativePath tag in EXIF UserComment
@@ -194,6 +190,7 @@ def test_cli_threads_and_dry_run():
         # Run with --threads 5 --dry-run
         result = subprocess.run(
             [sys.executable, "sortinfolder.py", basepath, output_path, "--threads", "5", "--dry-run"],
+            check=False,
             capture_output=True,
             text=True,
         )
@@ -226,6 +223,7 @@ def test_cli_invalid_threads_value():
     """Test that invalid thread values are rejected."""
     result = subprocess.run(
         [sys.executable, "sortinfolder.py", "/tmp", "/tmp/out", "--threads", "0"],
+        check=False,
         capture_output=True,
         text=True,
     )
@@ -235,6 +233,7 @@ def test_cli_invalid_threads_value():
 
     result = subprocess.run(
         [sys.executable, "sortinfolder.py", "/tmp", "/tmp/out", "--threads", "101"],
+        check=False,
         capture_output=True,
         text=True,
     )
@@ -248,9 +247,9 @@ def test_cli_invalid_threads_value():
 def test_error_summary_and_exit_code():
     """Test that errors are collected and non-zero exit code is returned on failure."""
     import io
-    import sys
     import logging
-    from sortinfolder import sort_images, setup_logging
+
+    from sortinfolder import sort_images
 
     with tempfile.TemporaryDirectory() as tmpdir:
         basepath = os.path.join(tmpdir, "source")
@@ -349,6 +348,7 @@ def test_cli_exit_code_end_to_end():
 
         result = subprocess.run(
             [sys.executable, "sortinfolder.py", basepath1, output_path1],
+            check=False,
             capture_output=True,
             text=True,
         )
@@ -374,6 +374,7 @@ def test_cli_exit_code_end_to_end():
 
         result2 = subprocess.run(
             [sys.executable, "sortinfolder.py", basepath2, output_path2],
+            check=False,
             capture_output=True,
             text=True,
         )
