@@ -54,7 +54,7 @@ The script includes detailed logging for tracking its processing steps and handl
 
 ## Note
 
-- The script is designed for JPEG images.
+- The script processes all formats listed under Supported formats above.
 - Make sure to back up your images before processing.
 
 ## License
