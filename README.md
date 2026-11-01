@@ -35,6 +35,8 @@ python sortinfolder.py [basepath] [output_path] [--log LEVEL] [--threads N] [--d
 - `--threads N`: (Optional) Number of worker threads (1-100). Default: 30.
 - `--dry-run`: (Optional) Simulate processing without copying files. Default: false.
 
+**Supported formats:** `.jpg`, `.jpeg`, `.png`, `.heic`, `.tiff`, `.tif`, `.bmp`, `.webp`
+
 ## Functions
 
 - `setup_logging(level)`: Configures the logging system.
