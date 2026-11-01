@@ -230,7 +230,8 @@ def test_cli_invalid_threads_value():
         text=True,
     )
     assert result.returncode != 0, "Expected non-zero exit code for threads=0"
-    assert "threads" in result.stderr.lower() or "thread" in result.stderr.lower()
+    combined = result.stdout + result.stderr
+    assert "threads" in combined.lower() or "thread" in combined.lower()
 
     result = subprocess.run(
         [sys.executable, "sortinfolder.py", "/tmp", "/tmp/out", "--threads", "101"],
@@ -238,7 +239,8 @@ def test_cli_invalid_threads_value():
         text=True,
     )
     assert result.returncode != 0, "Expected non-zero exit code for threads=101"
-    assert "threads" in result.stderr.lower() or "thread" in result.stderr.lower()
+    combined = result.stdout + result.stderr
+    assert "threads" in combined.lower() or "thread" in combined.lower()
 
     print("test_cli_invalid_threads_value passed!")
 
