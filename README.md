@@ -25,13 +25,15 @@ This Python script automatically sorts image files into folders based on their c
 3. Run the script using the command line:
 
 ```
-python image_processor.py [basepath] [output_path] [--log LEVEL]
+python sortinfolder.py [basepath] [output_path] [--log LEVEL] [--threads N] [--dry-run]
 ```
 
 
 - `basepath`: The directory where your images are stored.
 - `output_path`: The directory where processed images will be saved.
 - `--log`: (Optional) Set the logging level (`DEBUG`, `INFO`, `WARNING`, `ERROR`, `CRITICAL`). Defaults to `INFO`.
+- `--threads N`: (Optional) Number of worker threads (1-100). Default: 30.
+- `--dry-run`: (Optional) Simulate processing without copying files. Default: false.
 
 ## Functions
 
