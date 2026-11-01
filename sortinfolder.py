@@ -147,7 +147,7 @@ def add_relative_path_tag(image_path, relative_path):
     except Exception as e:
         logging.error(f"Error adding tag to file {image_path}: {e}")
 
-def process_image(file_path, basepath, output_path):
+def process_image(file_path, basepath, output_path, dry_run=False):
     """
     Process an image file by copying it to a new location, organizing it by date, rotating it if needed,
     and adding a tag with the relative path.
@@ -156,6 +156,7 @@ def process_image(file_path, basepath, output_path):
         file_path (str): The path of the image file to be processed.
         basepath (str): The base path of the directory containing the image file.
         output_path (str): The path of the directory where the processed image will be saved.
+        dry_run (bool): If True, simulate processing without copying files. Default: False.
 
     Returns:
         None
@@ -168,7 +169,7 @@ def process_image(file_path, basepath, output_path):
     logging.debug(f"Processing file: {file_path}")
     date_taken = get_date_taken(file_path)
     new_folder = os.path.join(output_path, date_taken.strftime("%Y/%m/%d"))
-    if not os.path.exists(new_folder):
+    if not dry_run and not os.path.exists(new_folder):
         os.makedirs(new_folder)
         logging.info(f"Created directory for date: {new_folder}")
 
@@ -186,6 +187,28 @@ def process_image(file_path, basepath, output_path):
     if counter > 1:
         logging.info(f"Filename collision detected for {base_name}, using {os.path.basename(new_file_path)}")
 
+    if dry_run:
+        logging.info(f"DRY RUN: Would copy {file_path} to {new_file_path}")
+        # Check what EXIF rotation would be applied
+        try:
+            with Image.open(file_path) as img:
+                orientation = get_exif_orientation(img)
+                if orientation in [3, 6, 8]:
+                    angle = {3: 180, 6: 270, 8: 90}[orientation]
+                    logging.info(f"DRY RUN: Would rotate image {new_file_path} by {angle} degrees")
+                else:
+                    logging.info(f"DRY RUN: No rotation needed for {new_file_path}")
+        except Exception as e:
+            logging.warning(f"DRY RUN: Could not check rotation for {file_path}: {e}")
+        # Check what tag would be set
+        ext_check = os.path.splitext(new_file_path)[1].lower()
+        if ext_check in ('.jpg', '.jpeg'):
+            relative_path = os.path.relpath(os.path.dirname(file_path), basepath)
+            logging.info(f"DRY RUN: Would add RelativePath tag: RelativePath:{relative_path} to {new_file_path}")
+        else:
+            logging.info(f"DRY RUN: Would skip tag for {new_file_path} (format not supported for tagging)")
+        return
+
     # Copying the image
     shutil.copy2(file_path, new_file_path)
     logging.info(f"Copied {file_path} to {new_file_path}")
@@ -197,21 +220,28 @@ def process_image(file_path, basepath, output_path):
     relative_path = os.path.relpath(os.path.dirname(file_path), basepath)
     add_relative_path_tag(new_file_path, relative_path)
 
-def sort_images(basepath, output_path):
+def sort_images(basepath, output_path, threads=30, dry_run=False):
     """
     Sorts images in the specified basepath and saves them to the output_path.
-    This is done in 30 threads in parallel.
 
     Args:
         basepath (str): The base path where the images are located.
         output_path (str): The path where the sorted images will be saved.
+        threads (int): Number of worker threads (1-100). Default: 30.
+        dry_run (bool): If True, simulate processing without copying files. Default: False.
 
     Returns:
         None
     """
+    if not 1 <= threads <= 100:
+        raise ValueError(f"threads must be between 1 and 100, got {threads}")
+
     if not os.path.exists(output_path):
         os.makedirs(output_path)
         logging.info(f"Created output directory: {output_path}")
+
+    if dry_run:
+        logging.info("DRY RUN MODE - Simulating processing without copying files")
 
     # List all files to process
     files_to_process = []
@@ -220,8 +250,8 @@ def sort_images(basepath, output_path):
             files_to_process.append(os.path.join(root, file))
 
     # Process files in parallel using a ThreadPool
-    with concurrent.futures.ThreadPoolExecutor(max_workers=30) as executor:
-        futures = [executor.submit(process_image, file_path, basepath, output_path) for file_path in files_to_process]
+    with concurrent.futures.ThreadPoolExecutor(max_workers=threads) as executor:
+        futures = [executor.submit(process_image, file_path, basepath, output_path, dry_run) for file_path in files_to_process]
         for future in concurrent.futures.as_completed(futures):
             future.result()  # to catch exceptions
 
@@ -237,6 +267,7 @@ def main():
     epilog = """Examples:
   sortimages /data/photos /data/sorted
   sortimages /data/photos /data/sorted --log DEBUG
+  sortimages /data/photos /data/sorted --threads 5 --dry-run
 """
     parser = argparse.ArgumentParser(
         prog="sortimages",
@@ -247,6 +278,8 @@ def main():
     parser.add_argument("basepath", type=str, help="The base path where the images are located.")
     parser.add_argument("output_path", type=str, help="The output path where images will be copied to.")
     parser.add_argument("--log", type=str, default="INFO", help="Set the logging level (DEBUG, INFO, WARNING, ERROR, CRITICAL)")
+    parser.add_argument("--threads", type=int, default=30, help="Number of worker threads (1-100). Default: 30")
+    parser.add_argument("--dry-run", action="store_true", help="Simulate processing without copying files")
     args = parser.parse_args()
 
     # Set up logging level based on the argument
@@ -255,9 +288,9 @@ def main():
         raise ValueError(f"Invalid log level: {args.log}")
     setup_logging(numeric_level)
 
-    logging.info(f"Script arguments - Basepath: {args.basepath}, Output Path: {args.output_path}")
-    
-    sort_images(args.basepath, args.output_path)
+    logging.info(f"Script arguments - Basepath: {args.basepath}, Output Path: {args.output_path}, Threads: {args.threads}, Dry-run: {args.dry_run}")
+
+    sort_images(args.basepath, args.output_path, threads=args.threads, dry_run=args.dry_run)
 
 if __name__ == "__main__":
     main()
