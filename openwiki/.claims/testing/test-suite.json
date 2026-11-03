@@ -1,0 +1,142 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:4102ad822a4972b71748bd6785db1f3455f06f0e44489eeef5b68fd0c10237bc",
+  "claims": [
+    {
+      "id": "claim_91e318f96cb34e2f8c92fadae7c37cb3",
+      "statement": "test_sortinfolder.py is a single pytest file with seven tests spanning two invocation styles: CLI-level tests run [sys.executable, \"sortinfolder.py\", ...] as a subprocess to assert on exit codes, log output, and --help text, while unit-level tests import process_image or sort_images directly to assert on return values and internal state. The file's __main__ block also runs all seven tests sequentially as a standalone smoke runner without pytest.",
+      "evidence": [
+        {
+          "resource": "repo://sortinfolder.py#L316-L317",
+          "version": "repo-lines-v1:sha256:9a6a7ffeed1af83ced837054949e0b2fdf0e568fe3d4c2e20c229ec0a9707cc3:eyJzZWxlY3RlZExpbmVDb3VudCI6MiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZjQ4NmZmNWNmOTM2M2I0NDI5MzM2ODAzYjJjOTYwZTczZGE4YzQ3ZmEwYzZmNjc2NThkMTRiMzIzY2QyMmQzNCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMThlOTkyMzJjZDNhMzA5ZjUwY2JkNmY2NjIxMjdlZWFhZmNlMWY3MzYyOTJkZWZiMTEzZDk4MWEyMGM3ZDg1MiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNTdkNDg4MTRmZDIwNDZiOTg4MjlmZDZlNzA5MDkwN2E4OWFkOWIwNGMwYmM5MzE1NjA0ZTQ1MzBhN2VmM2IzNSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjAsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZTNiMGM0NDI5OGZjMWMxNDlhZmJmNGM4OTk2ZmI5MjQyN2FlNDFlNDY0OWI5MzRjYTQ5NTk5MWI3ODUyYjg1NSJ9"
+        },
+        {
+          "resource": "repo://test_sortinfolder.py#L11-L325",
+          "version": "repo-lines-v1:sha256:261d980eeab3bfe217203e285864bfff6fccd779efcf686fd4335a798c9198a5:eyJzZWxlY3RlZExpbmVDb3VudCI6MzE1LCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiIyZjNkZDllZDFlYmY3YjdhZjE1NjI5ZDE4NGFhNzA4OWU4YTA4MzU0ZmU3ZDcwZDI0MmM1ZGIxMDJlNDhmZTRhIiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiIyZDkxZjA5N2M2YTQ5YjA4M2I3NTUyMjIyNjgxMzYyYjI2YzdlMTk1N2RiMGY2YTM1NWQ4MzdmZTViODUzYjM4IiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiI5Y2I4Njk3NmExNmI2NDUwOTMwYzk1NzQyYWIyNWVkYjVkZmUyNGY5NjE0NGIyYWRiZTEwYjhiODBmYWFjZTUxIiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MywiZm9sbG93aW5nQ29udGV4dEhhc2giOiJiNTU4OTE2Y2U0NmQ4ZjlkNTY3YTE1YmRkYzE3NDg0MTg0ZDVjMzIxNWVlZTFhMTE1MGMzMzdlMTUxNzNlZmI5In0"
+        }
+      ]
+    },
+    {
+      "id": "claim_9db5be4629de4816899db461023c0cf8",
+      "statement": "Every test builds its environment inline with the same fixture pattern: tempfile.TemporaryDirectory for disposable source/output directories, images created with PIL.Image.new and saved with an EXIF dictionary pinning piexif.ExifIFD.DateTimeOriginal to \"2024:06:15 10:30:00\" (via piexif.dump passed to img.save), and content verification through tolerant pixel-color assertions (e.g. r > 200 and g < 50) rather than exact checksums, since JPEG encoding can quantize named colors like 'red' to 254.",
+      "evidence": [
+        {
+          "resource": "repo://test_sortinfolder.py#L171-L187",
+          "version": "repo-lines-v1:sha256:7794d4de30647440715267434af084030f1270ed2edf2716eb0e604690f8f2f4:eyJzZWxlY3RlZExpbmVDb3VudCI6MTcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjljMmE5YTZlMDQ3YmE4MTBkMjU1ZDg5Mjg4MGRkMjQ4ZTJiYTYyN2MyMmJjZDkzMWMzN2VkY2I4ODExZTY0ZWIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjU3ZmNkZWQ0OTcyNDE0NjBiMzA3ZWViZGNlOGNmZjliNGVlMGY1NzAxOTlhNjM0MzNmZTRmM2Y4MjE3MWRiMTIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjUyZjI3OTU5ZmI1ZGU4M2FhNzZmNzg0NzI0YmNlYjY1MWMxNWJlZmYxMTY2MTkwZTIxNDIzNTU1ZjFiZTBhZGQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImQxNTZjZTQzMWFjZjM1YTViYmFkNjQwMWNiYzgwNmMxOTQyMjEyOGQ2NzQyODQwODhmODJhODViNTkwZDhjMTgifQ"
+        },
+        {
+          "resource": "repo://test_sortinfolder.py#L30-L88",
+          "version": "repo-lines-v1:sha256:eb11e860ab309756c18eb48af8754911e4211201ca58e0cd48047cc423f71526:eyJzZWxlY3RlZExpbmVDb3VudCI6NTksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjljMmE5YTZlMDQ3YmE4MTBkMjU1ZDg5Mjg4MGRkMjQ4ZTJiYTYyN2MyMmJjZDkzMWMzN2VkY2I4ODExZTY0ZWIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMjQ0OTkwMjRkODA2MWE2ZjU1NjIxZWFiMmZlNzk3NjYxYzE0MTBlNzllNzBhYWE0OTA4NjAxOWE2NWQyNzgiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImFhMDU3ZTlmZjFlOWZhZGI0ZDc1N2FkNjQ3Mjk1ZjU4N2NlOWVjMWMwZDhkYWJlYjE2ZDk0NDY0ZjFhY2M4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjM1ODI4OWY2MDAyMWVkNDgyNWUxNGM3YWY5YTRkNjIwYmY1NzVkY2EwNWFhY2Q0ODUwOTFjOTlmNDAwYzNlMDgifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_59156d44eafb4eb38c6f1efd4b61cd62",
+      "statement": "test_help_shows_usage_and_examples runs the script with --help and asserts the output contains 'usage: sortimages', 'options:', and 'Examples:', pinning the parser's prog=\"sortimages\" and raw-description epilog as part of the tool's contract.",
+      "evidence": [
+        {
+          "resource": "repo://test_sortinfolder.py#L11-L23",
+          "version": "repo-lines-v1:sha256:7450097da4316695119c94ec0d8d9034eab205982fcce5fec1f1f190b7c186cb:eyJzZWxlY3RlZExpbmVDb3VudCI6MTMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjJmM2RkOWVkMWViZjdiN2FmMTU2MjlkMTg0YWE3MDg5ZThhMDgzNTRmZTdkNzBkMjQyYzVkYjEwMmU0OGZlNGEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjljYjg2OTc2YTE2YjY0NTA5MzBjOTU3NDJhYjI1ZWRiNWRmZTI0Zjk2MTQ0YjJhZGJlMTBiOGI4MGZhYWNlNTEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjhlNzBiZjQwYmM4ZGJjZTJjNzFmYTQ4MjdjZWQzYTRlZDI4NDViNGY1NDY2ZWJhNWIwMmFiYjFmOGExNzA2YzgifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_37dbb7ba643b433496868b8191598c67",
+      "statement": "test_process_image_handles_duplicate_filenames proves the collision-suffixing loop: two files both named test.jpg in different subfolders with identical EXIF dates are processed into the same output/2024/06/15 folder, the first keeping its name and the second receiving the _1 suffix, with differing MD5 checksums and original red/blue pixel content preserved at the image center.",
+      "evidence": [
+        {
+          "resource": "repo://test_sortinfolder.py#L24-L93",
+          "version": "repo-lines-v1:sha256:1ee3c7fa6b71655a6253ac30113df76c02e26c328b26c0c90f1bd2a650b895ae:eyJzZWxlY3RlZExpbmVDb3VudCI6NzAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijc4Zjc5YzFmOWZjY2NkZGJmMjFhZTQwMTdiOGIwODBiN2RmMTIzYWVlMTljNzhhNDA1YjUyMDI1MzY2NGQ3YjQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjBmMTZmY2Q4MWYwYTAwMzdkMjY1YWI2NjZkYzMzMjVhZWExMTQzNjA1ODZhZjAyMDVlNjgwYjM3ZjdmNDJjYWUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjkyYWU3OWUxYTk5MmU1MjA2N2ZhMDVlODhmMzdiZmRlOTRmNTc0MjBhZjNlNmUzYzJjMzVlN2EwODQ2YmE4YjkifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_b55e8286d6824bfdbddae682c47e8095",
+      "statement": "test_process_image_supports_multiple_formats proves multi-format processing: EXIF-stamped JPG and TIFF are copied into output/2024/06/15, an EXIF-less PNG is still copied (date falls back to file ctime), the output JPG gains a 'RelativePath:' entry in its EXIF UserComment (verified with piexif.load), and the TIFF is copied but not tagged. This contradicts the README's 'designed for JPEG images' note; SUPPORTED_FORMATS in sortinfolder.py actually accepts .jpg, .jpeg, .png, .heic, .tiff, .tif, .bmp, .webp, and the tests are the authoritative source of truth on format support.",
+      "evidence": [
+        {
+          "resource": "repo://sortinfolder.py#L13-L13",
+          "version": "repo-lines-v1:sha256:01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMDFiYTQ3MTljODBiNmZlOTExYjA5MWE3YzA1MTI0YjY0ZWVlY2U5NjRlMDljMDU4ZWY4Zjk4MDVkYWNhNTQ2YiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMDFiYTQ3MTljODBiNmZlOTExYjA5MWE3YzA1MTI0YjY0ZWVlY2U5NjRlMDljMDU4ZWY4Zjk4MDVkYWNhNTQ2YiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYmVlMmI0NzNmYjRkZmFjMDdkNjk3YjY3YTMxNmY5YjZkMjgxM2U4MGU0MTllMGQ3YWQwMGY2ZTA4YjVkYjBkOCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMTk5NzBmY2NjMGMwMTJmYmMyZDQ0MWMxOGI2Y2E3NGYzOTUxZTFmY2E3MzQ2NGNjMTk0YjgxYmQ2YTUwMmFhOSJ9"
+        },
+        {
+          "resource": "repo://test_sortinfolder.py#L94-L166",
+          "version": "repo-lines-v1:sha256:f7d706c2863dc18344b1a9cc580034e8caee79e11da895315e1670f5649bd090:eyJzZWxlY3RlZExpbmVDb3VudCI6NzMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImYzY2EzN2I3Y2M2OGVlZWM4ZTlmM2ZhNDRhMDNmZDg2YTFlMjQ3Y2YyYzU1NzhhODk2NDQxOGUwNTk0NGUyOTAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImFlZmE1M2VhNWNkMzA4NDg1ZDk0NzA3YzZhMTk0ZWJkZTBkMDFiYTM5MmFiNDUzZmI5NmVlMzg4OWVlMjk4NTAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImQ0ZWUwNTUxZDViYjM0MTZiMjNiNjE5Y2QyZDk0NTM2ZWZiMzMwNzJkMjJmNWMyMmIxMjVlZGZjMGFlZTA2YTcifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_8b71bc5b28d845b4a129b63076ea7a6e",
+      "statement": "test_cli_threads_and_dry_run runs the CLI with --threads 5 --dry-run and asserts exit code 0, a 'DRY RUN' indication in combined stdout+stderr (logging goes to stderr), the target date folder 2024/06/15 and filename test.jpg named in the log, and that the output directory contains no files — proving dry-run simulates the plan without any filesystem writes.",
+      "evidence": [
+        {
+          "resource": "repo://sortinfolder.py#L211-L229",
+          "version": "repo-lines-v1:sha256:1f2be995563dc4793b2fe7c3e371694f5bfca56b138b25ef27757284a1b50d77:eyJzZWxlY3RlZExpbmVDb3VudCI6MTksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImE5N2I0N2JiODFjZTkzY2JhNjdhZmMwODY5OGE4MGNmYTA5M2E4NjY3ZTljOWY5NjUzMzc4MThkNjU3OGQxODUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImE0ZjQzMDEyYjIzZTljNWI4N2U4ZTczNWE1ZTcwYmM3ZGQyMTkxYzI3ZGFiMDUxZGJkMGE0ODY3MmUwZjM1OWYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijg4ZmE3NDM3ZjdiZmQzZGQ4YzhiYjNiYTUzNTBkZWU0MTQ3NTNkODJjOWI1YTQxNTlhMzViMDFjOTgyOGYzNDgiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjA2YjA4OTIwNTExOTM0ODVmZjY3ZjI4NzI4MjE2M2JlYTgyODgyZmZkMTBhOGRlZTc5NTg0ZWM2OGVkOWQyZGIifQ"
+        },
+        {
+          "resource": "repo://test_sortinfolder.py#L167-L221",
+          "version": "repo-lines-v1:sha256:419d095d6d40edb25495573421ab4a7843c7ee90272a5aeb048bb1aa920fac59:eyJzZWxlY3RlZExpbmVDb3VudCI6NTUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjU0ODUwMzIzMTBiZjRkMmY4ZmQ2ZjZmNTc3ZjVjODE3OGM1YjBkMWQ3ZTQ3YzMwODZkYzNiYWMzZmI5MzYxZTUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjJmYzUyZGVkMjk4Y2Y3NmEyY2Y2MjE4MWE3NjdiMjljOTA1NmI0ZWVjZmRjNDcwMzNmMDE0MTk3MDUxMzczMGQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImIyNDQwNmMxMTc4MzllMjA2M2VkODM2ZTkyMTMzZGIxZjFkMTVhODM0OGNkN2FhYTMyNzQxNzQ5MDA3ZmU5ZTgifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_fc247b5382294113983ca755b8796124",
+      "statement": "test_cli_invalid_threads_value runs the CLI with --threads 0 and --threads 101 and asserts non-zero exit codes with output mentioning threads, proving the 1–100 bound is enforced inside sort_images (raise ValueError) rather than at argparse parse time, and that the resulting ValueError propagates as a non-zero interpreter exit.",
+      "evidence": [
+        {
+          "resource": "repo://sortinfolder.py#L232-L234",
+          "version": "repo-lines-v1:sha256:067c5dc2c5466979c4a1ffbed9e4966147d1b23dfe14d9db8247cf99f60e7f0a:eyJzZWxlY3RlZExpbmVDb3VudCI6MywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMDFiYTQ3MTljODBiNmZlOTExYjA5MWE3YzA1MTI0YjY0ZWVlY2U5NjRlMDljMDU4ZWY4Zjk4MDVkYWNhNTQ2YiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNjBmMmIxOWYzNWE4YTNkY2Q0N2ZiZjg4ZWQyNDc3MzY2Y2MzMmYwZjRjNDNiMDc5YmMyZmE5NTQ4NzNmMTNhOCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZmQzMjg3M2IyY2YyNWJjOTkyNDRjM2IwOTE1MjFhY2QwZjZiNmZmYWQ4ZDkyNTBhYTExYzU2MmI1ZGM5ZmQwNyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZjRmNjZkNGU0Y2E0OGQwMTU1ODQ5MmFlYTUxNjRkODc0NDNjZGVjNjQ4N2E5NTg3MWZmNTAwMDVkN2RjMzRiZiJ9"
+        },
+        {
+          "resource": "repo://test_sortinfolder.py#L222-L246",
+          "version": "repo-lines-v1:sha256:1f859cd30780ed3b81fa6dbbd7569c1be7d182051d8326a5eb36b64a0b448c09:eyJzZWxlY3RlZExpbmVDb3VudCI6MjUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjM2NzZkZjQ4MTMzMmMwNjUxY2MwYWJiNGIzOGY3MjE5NzcyMzRkYjNlZGYzOWM4YTE2N2Y0MTUyMmEzMWYxZDEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjQ1NjY1MGU3YTg0MGIxYmJhNGI3NWZiMmQ2ZGI4ZTIzNDliODk4ZDZiZGQyOGI3OGFiMTRhZjg0MjVlYzY3NDEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjBhMDYxNTU4MmI3M2NjYjRlMTQ0OWE3ODc2Zjk0OTM1YmY0OTg5NzViZGJiYmY4MTQ1MjhjODQ3MzRhYTFmYWYifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_fa877c4558664621a6a4877e6c006a91",
+      "statement": "test_error_summary_and_exit_code proves sort_images' error contract: it captures logging into an in-memory StringIO handler, feeds one valid EXIF JPEG plus one corrupted file, and asserts the (success_count, failure_count, errors_list) return tuple is (1, 1, [error]) where the error dict has 'file', 'type', and 'message' keys referencing corrupted.jpg; the log contains 'Processed: 2, Succeeded: 1, Failed: 1'; and the valid image is still copied to 2024/06/15/valid.jpg, proving per-file failure isolation.",
+      "evidence": [
+        {
+          "resource": "repo://sortinfolder.py#L253-L281",
+          "version": "repo-lines-v1:sha256:d4ee3251c5a74b635a4fc1d248f7f080b3dedfcd241aa85d1a47fb258eb0520d:eyJzZWxlY3RlZExpbmVDb3VudCI6MjksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImM0Y2Q2MWFkZjZhOTQwZGU2ODQ1ZTg5Y2M2YWM3YzBlNDFhMDFjY2M4ZWEzN2NhZjMyZWQ3MDg2MWYxY2E4MzIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjhkODBlMjQ5NGI5OGFlY2UyNjlkYjE5M2NlYjRjYTdjNzhkZTA3NTM5ZjM3MWZiNTY5MzMxY2MwMTk1MWQ3ODQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImIwYzY2MTk0ZmY3MzIzOGIyMWUzNGQ0ZWFjZDc0ZTE3ZWFkZjg1ODI0MDkyZWY2MjczMTUxMDlmNmY3Mjk1NGYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImIxZmMxODNmM2Q3NzI2OGE5YjVhNjkzZjIxYzc1MWJlNGFjZjQ2Y2FiMWQ5MzdjNzgzM2E2OWQyNWY2YWJjNWYifQ"
+        },
+        {
+          "resource": "repo://test_sortinfolder.py#L247-L324",
+          "version": "repo-lines-v1:sha256:f3bb7d6338bdd672659da50bddd7c4d8ee14f8ba49f22ed3162e8719ca46a0c7:eyJzZWxlY3RlZExpbmVDb3VudCI6NzgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjkxMzM5ODZlZTUyZDM4MmVkZDIzMDNhYzIyYzdiZjc3ZDQ0OGMxMDU5ZmZhMTBlYTRlYzQxMTkzNWI2YTc2M2EiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjVkNTUwMGNiOGU3ZGM2YWY1YWI1NTNhY2YxNzcyYWRhMDkzMWQwZjk3YTU0Y2I1ZWI5NjBjMjI3ZTY5NmQ2YmIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjAwYjg0NGZkN2E5ZDBjYTM1NWQ0ZTNlNTFlM2M2OWNkYzU1NmZkODM3MzliOGYxY2ZkZmExNWQ5Y2ZmZTliODAifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_11e9a7d2e55d4fd99599cde2845644f5",
+      "statement": "test_cli_exit_code_end_to_end proves the exit-code contract through subprocesses alone: a run containing one corrupted file exits 1 with 'Failed: 1' and 'Processed: 2' in the output, while a run of only valid files exits 0 with 'Failed: 0' and 'Processed: 1' and the image copied to 2024/06/15 — reflecting main()'s sys.exit(1) when failure_count > 0 and fall-through exit 0 otherwise.",
+      "evidence": [
+        {
+          "resource": "repo://sortinfolder.py#L311-L315",
+          "version": "repo-lines-v1:sha256:f3415fa40f3200bc43c817da7de0db0cbc83ff7eb420ed932bb70b6be3f308fd:eyJzZWxlY3RlZExpbmVDb3VudCI6NSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYzI0MTlhNGE4ZDg1ZDExZTJlMDA3MTQ4ZDcyOGVjZWQ4NDFmZWIxMmEyMDEwOWFjYTg2ZWQzODk1OTcxM2Q3NyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMDFiYTQ3MTljODBiNmZlOTExYjA5MWE3YzA1MTI0YjY0ZWVlY2U5NjRlMDljMDU4ZWY4Zjk4MDVkYWNhNTQ2YiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNDk4MGEzNTM5OTBjYTQyNTc1NmM0ZDQ5MTdjMWY0OWQ0OTUyOWNhMDUzMDM2Y2NiOTMzZWIyYzVmMGM3YmU5NiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjIsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiOWE2YTdmZmVlZDFhZjgzY2VkODM3MDU0OTQ5ZTBiMmZkZjBlNTY4ZmUzZDRjMmUyMGMyMjllYzBhOTcwN2NjMyJ9"
+        },
+        {
+          "resource": "repo://test_sortinfolder.py#L325-L393",
+          "version": "repo-lines-v1:sha256:be2ca7c1e1fe20bea8866636e483dd4ef39686f4c0c56ab44ad394ec05cfcdc2:eyJzZWxlY3RlZExpbmVDb3VudCI6NjksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjJkOTFmMDk3YzZhNDliMDgzYjc1NTIyMjI2ODEzNjJiMjZjN2UxOTU3ZGIwZjZhMzU1ZDgzN2ZlNWI4NTNiMzgiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjM0YTEzN2RkYWRlOTk2MmY4ZmFjOTVkZjcxMWQ0N2M0N2YwYjViZDY1NzVjYjFiNDg0NjUyNTE1OTA3YWZhNTIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjcxZjJiYjIxMDU1MDE1NDZlMjIzM2M3MzMwYmY1NzQxNDg1YzgyNDQ4MTEzODY1MDc1ZWY1Y2YyNmVkMzg1YjMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImY5NWJkZTEyMWFmM2RlODNjZmY2M2M3MGEzNWViY2I3MjFjZTc4ZDVmNzQ3ZDRiZjY2N2RhMzhkZjU0ZTgwNjkifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_a6f80a8c3c2b4770b025c32675c95de1",
+      "statement": "CI is defined in .ci/ci.yaml: the image is built from .ci/test.Dockerfile (python:3.12-slim with Pillow, exifread, and piexif installed via pip, WORKDIR /workspace), and the unit check runs [\"python\", \"-c\", \"import sortinfolder\"] via execv without a shell. The unit check is deliberately minimal — it verifies only that the module imports cleanly (compiles, resolves imports, defines functions without raising), which is also why the test suite's function-level imports are safe: importing the module must be side-effect-free because the entry point is guarded by if __name__ == \"__main__\".",
+      "evidence": [
+        {
+          "resource": "repo://.ci/ci.yaml#L1-L5",
+          "version": "repo-lines-v1:sha256:8302756f66b37d97fbb6b839811b2ad0244e7432e825d4b117c98a8db90d0805:eyJzZWxlY3RlZExpbmVDb3VudCI6NSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMzhjM2Y2OWE5OTg0MzM3NmNjNjdhNDZkNGRlMzA0NDlkZDNiZDM3NDI1NzQ0ZWI0ZGVhNWU1ODQ4MjJjZTA1OCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZjE0M2Y3YzQ5NTBhOGZjMWNlZjVlZDQzMWFjNjcxZmUyZDY0MzUyOWYxZTFjMTUyYzUzODA2MTUyNDY0ZmU0ZSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjAsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZTNiMGM0NDI5OGZjMWMxNDlhZmJmNGM4OTk2ZmI5MjQyN2FlNDFlNDY0OWI5MzRjYTQ5NTk5MWI3ODUyYjg1NSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjAsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZTNiMGM0NDI5OGZjMWMxNDlhZmJmNGM4OTk2ZmI5MjQyN2FlNDFlNDY0OWI5MzRjYTQ5NTk5MWI3ODUyYjg1NSJ9"
+        },
+        {
+          "resource": "repo://.ci/test.Dockerfile#L1-L5",
+          "version": "repo-lines-v1:sha256:2916598626016e003942dbfd90e277bd323ae19c48ef23b1e76f32cd76b31a70:eyJzZWxlY3RlZExpbmVDb3VudCI6NSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNmU5MDQwYjZjMTZiNjVlMzk0MjllMTNmZmYxODk5ZmFmZTNjODA0MmU3NDYxY2Q0N2JjOWZjZGViZTBkNTM3MCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiOGI0NTI3NDU3ODA4OGMxNjZiMTM0YjE5YzA0ZGUzNjI3MTBjZDM0ODM2ZTM5ODg5YzY2NTY2YTE0MmQwMDYxZiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjAsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZTNiMGM0NDI5OGZjMWMxNDlhZmJmNGM4OTk2ZmI5MjQyN2FlNDFlNDY0OWI5MzRjYTQ5NTk5MWI3ODUyYjg1NSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjAsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZTNiMGM0NDI5OGZjMWMxNDlhZmJmNGM4OTk2ZmI5MjQyN2FlNDFlNDY0OWI5MzRjYTQ5NTk5MWI3ODUyYjg1NSJ9"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.7.3",
+    "at": "2026-11-03T04:36:59.554Z"
+  }
+}

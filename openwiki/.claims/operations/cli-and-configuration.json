@@ -1,0 +1,150 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:cbc7842009ccf3e0b1636a877780440402245c7e7bfafac4dbbef69d0d5af540",
+  "claims": [
+    {
+      "id": "claim_c087983b592449d1bae57fa43a0da6ba",
+      "statement": "main() validates --log immediately after parsing: the value is upper-cased and looked up via getattr(logging, args.log.upper(), None); a non-int result raises TypeError(\"Invalid log level: {args.log}\") before logging is configured or any file is processed. Default is \"INFO\".",
+      "evidence": [
+        {
+          "resource": "repo://README.md#L55-L58",
+          "version": "repo-lines-v1:sha256:1f165ff1cbb5bc00db29bf65eb21c96105abba7b2192fff71cb10a7ca09768f9:eyJzZWxlY3RlZExpbmVDb3VudCI6NCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNjEyMzNlNGE5MzIyNzM0MWE1ZGM5NTA1YWIyOTE2OGJiMGE5NmNhNDI4MDU4YjUwYzdjNTNmODA1NjA5NmEyNiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYWUwNzBkYTY5NWYzM2VlZTlhZDlhNmYxMmNiMmMyYzVkODA3NDEwM2M4ZGY1Y2UzOTZmZjVhNjVlZGU4Y2UzNyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNjViNzBlYTUzMmQ3ZjU2ZjE1YWY4ZmJiZGQ1ZDIzMGQ0Yzk1NWM4MjU0YzZhN2EyZWViZTJiMmUxZGUxZmUzYiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjIsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiOTgyZjQ3NWFlMGZlZjdmOGYxOTEyNmNhZDkzNzY3YzkyNjA4MjQzOWE2ZTZiMzE2NTk3YTc3YzE4ZTgwNGFlNyJ9"
+        },
+        {
+          "resource": "repo://sortinfolder.py#L297-L307",
+          "version": "repo-lines-v1:sha256:5eb13e7915a792967b5cdd3cb2a6ba33749d5f18bca816dd33074b2dec13605a:eyJzZWxlY3RlZExpbmVDb3VudCI6MTEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjE0YmI4NTljZmRjODg1ZTM3OTgzNDEwMjIyYmM3ZTVhMDkxNGVhMmVjMDBlOWE0OTA2Njk4M2I1ZTJkODA5ZTIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjA2ZTEzZjdmZDFiNGM4MjViYTJlY2E4OTc2MGQ2Y2M2NTAyOTQ2Zjg3Njk0Y2ZiOTA5NjcwNWI5Zjg5MjQ5OTgiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjVmY2E0ZjIyZTQyYTk0MWZmOGE3NTUxMjE5ODRlNmU3ZDgxMTMzYTEzMDY1N2Q0YjBkNjdiZjE5MDczMTk2MDYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjQ5ODBhMzUzOTkwY2E0MjU3NTZjNGQ0OTE3YzFmNDlkNDk1MjljYTA1MzAzNmNjYjkzM2ViMmM1ZjBjN2JlOTYifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_295294e33b114bf9bee7f864b6fdbb33",
+      "statement": "--threads is not validated at parse time in main(); it is passed through to sort_images, which enforces the bound 1 <= threads <= 100 and raises ValueError (\"threads must be between 1 and 100, got {threads}\") otherwise. test_cli_invalid_threads_value verifies subprocess runs with --threads 0 and --threads 101 both exit non-zero.",
+      "evidence": [
+        {
+          "resource": "repo://sortinfolder.py#L223-L238",
+          "version": "repo-lines-v1:sha256:8e102bcd23223254190dc70663553aca745dbe3a5d95cb979e46d8dfd0ece074:eyJzZWxlY3RlZExpbmVDb3VudCI6MTYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjcwZTkwZDQ5ZjI2ZDJhNTg4NjQzNjE5ZGZlYWFjNGI0NmM5YjAxZjg4NzI2YmIxYmQ1MWJmNzVkZDIxMzg0ZjMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjlmM2Q3NmNmYjZlYTUyZWM0ZGM3MDVjOTJiOTUzMDFjZDA4YjNlMTg1OTRiMWJlYzI2MWJiYjE2NmMzMDgyYTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjQwZmVjNTc1MTk4MTU2MWVlMTE0YWNjMzkzNjIwYmI3MDg5MTE5OTJiZWE2MzE5MmYxOGZhMDYzZjEyYmIyOWQifQ"
+        },
+        {
+          "resource": "repo://sortinfolder.py#L296-L311",
+          "version": "repo-lines-v1:sha256:f56330e6584cd02c051994331695092c9f979cfe447d55c91bf1461f72e3dfd9:eyJzZWxlY3RlZExpbmVDb3VudCI6MTYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjMwYzFmMTg4ZjE0MmVkN2E4MjQ2ODBiMjA3MTcyYzU1MTliYzYxNGE0OGZkYTdjZjE2N2VkYjhkZGY3OTk1NmMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImMyNDE5YTRhOGQ4NWQxMWUyZTAwNzE0OGQ3MjhlY2VkODQxZmViMTJhMjAxMDlhY2E4NmVkMzg5NTk3MTNkNzciLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjhjMzIyZGUwZTlmY2FiNWEzMDk1N2E1ZmI2NGZiOWY0ZDgwZjA5YzMxODg0M2M2MDc2YjRkOTcyNWUwODk0MDAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjY2MjhlNzY4ZjM4NzA3MjIyZWQxYjU1MTJmYmU1YWJjMTI3ZTFjYzA2Y2M4NmE1ZTQzZDE2Yjc5NWJiNGY1ZWQifQ"
+        },
+        {
+          "resource": "repo://test_sortinfolder.py#L222-L245",
+          "version": "repo-lines-v1:sha256:fcf0d6d858a26bb6f7cfb6200a85debfdb95eadc060a8d9855068eaf338670b3:eyJzZWxlY3RlZExpbmVDb3VudCI6MjQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjM2NzZkZjQ4MTMzMmMwNjUxY2MwYWJiNGIzOGY3MjE5NzcyMzRkYjNlZGYzOWM4YTE2N2Y0MTUyMmEzMWYxZDEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjQ1NjY1MGU3YTg0MGIxYmJhNGI3NWZiMmQ2ZGI4ZTIzNDliODk4ZDZiZGQyOGI3OGFiMTRhZjg0MjVlYzY3NDEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjAyNjI5YTEyN2MxODE1OTVlYjJmMmFmMmI3NGFkNTc2OTkwMzZjZTgyODE3NTEwOWJkZmE3ZmIxMmQ3YjdkMDUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_79beb99a839d45b8a2c813a6017ffaad",
+      "statement": "main() exits with sys.exit(1) only when sort_images reports failure_count > 0; a fully successful run falls through and exits 0. test_cli_exit_code_end_to_end asserts exit code 1 for a run containing a corrupted file and exit code 0 for a run of valid files only.",
+      "evidence": [
+        {
+          "resource": "repo://sortinfolder.py#L311-L314",
+          "version": "repo-lines-v1:sha256:64a3b2c96bd936e888d4a437735f6c90a9e20edef5c9fa2f5c2884f4312c2f1d:eyJzZWxlY3RlZExpbmVDb3VudCI6NCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYzI0MTlhNGE4ZDg1ZDExZTJlMDA3MTQ4ZDcyOGVjZWQ4NDFmZWIxMmEyMDEwOWFjYTg2ZWQzODk1OTcxM2Q3NyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMmZhMjA4NThhZjY0MjQ3YWE0N2YzMWQxZTAwNDRmNzEwNzU2YmQyNzRjZjUyZjA4OTdmODE1NTdjNTUyNWJmNyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNDk4MGEzNTM5OTBjYTQyNTc1NmM0ZDQ5MTdjMWY0OWQ0OTUyOWNhMDUzMDM2Y2NiOTMzZWIyYzVmMGM3YmU5NiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMDMyZTY5MjI1MTg0NjVkZWU5ODcwZTc2MDE2NTRhZWRlYjg5OGI4NDlmYmY2YzNmMDQ4YzhjMTkyZjczYmYwZSJ9"
+        },
+        {
+          "resource": "repo://test_sortinfolder.py#L313-L389",
+          "version": "repo-lines-v1:sha256:282711791d4297782c4dadee274ae507f68d907eca8e27bbf49305e898f8a510:eyJzZWxlY3RlZExpbmVDb3VudCI6NzcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImY3MDdiZTEzMmJmMDY0OTI1NzI3ZTEzNThiMWM5NjJjMjlmMjFjOGFkYjQzNzIyZTc3NzNkZTI4ODU5YWVkMGQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjZlZjRmODRjZTdkNTY0OWI5MjI1MjVkMzFhZjZlN2FhNGVhY2YyYTMzYWU0ZWFlNDA0MjAxNjUzZWFkMzI1ZTUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjY1NGM1ODVlZWIxMWQ2MmM0Mzc1ZWNkY2FmNTg3NGRhMTgwMDlmY2E3OTNkNjgwMDA2Nzc1ZmJjYmRhYTE4OTkiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjgyMGNlN2NhNmQxNjRjNDEwZmRiMmU5NGNiNGFmYmE1ZGFlNjhhNThhNWUwMzcwZWRkMmE4YWQ2NWE1NGNmNzYifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_720fe1492c0842d7b4e3eacd9ee59080",
+      "statement": "Per-file worker exceptions never abort the run: sort_images catches every Exception from futures, appends a structured record {\"file\", \"type\", \"message\"} to errors_list, logs it at error level, and always logs the summary line 'Processed: N, Succeeded: N, Failed: N' before returning (success_count, failure_count, errors_list).",
+      "evidence": [
+        {
+          "resource": "repo://sortinfolder.py#L237-L275",
+          "version": "repo-lines-v1:sha256:d25016ad7dd65f73fee7a463ffbd1f936570fc902fb88a69bf5825e8b5157f9a:eyJzZWxlY3RlZExpbmVDb3VudCI6MzksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjFlZGMzNjU1YTc3MWZmMDhlMDM1MDljNjhiMWE2YjNlOGMzZGI5MDI2YzdkODliNzAxZDczYWU1YjZlYzZmNmQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjE4NjZiM2Q4ZGZlZDVmNWU5YWMwMDIzOTlkOGE4NmRmMTc0OTRlNzEyZjkwMGY2N2UwNWJlNjYyZDhjY2M3MGUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImE0YmM5OTdmZjQ3Y2Q5YWI3ZjMzNGViNzY5OTQ5OGY1NTljNWNhZmYzYWNkMmQ2YzQ2M2M5NWQ4YzM4ZjJhYjEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjU3MGM2OGMyNDQ3NjdhMzI1ZTk0ODUyNjBjNDZiZDRkMzA4Zjg1ZWU2YjY2M2QzMGIzNDIwMzc0NzA4Yzc5ZDMifQ"
+        },
+        {
+          "resource": "repo://test_sortinfolder.py#L301-L348",
+          "version": "repo-lines-v1:sha256:203e459dfef02582b7e69f7565cfbc015517fe0c935d86c2b4cd594ede2b73b0:eyJzZWxlY3RlZExpbmVDb3VudCI6NDgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImUzYWQ5MzUwNDhmYzk3NDBjY2U5N2JjNzEzOWM3MmU4MDg4NjI1ZmY0NjZlNWJmZjEyOTYzY2Q1YzNiZDlmNWYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImJjMzcyNjdkMjEzODUwNGQ1ZTk2NmFmYTBlYWM0YjY0ODA1YzViNTYwMjNhM2M2OThlMGNhYTNjMTZkZTNkZWUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImEwY2M0OWI3Y2I4ZWM0YmYwZjU0YzZkYzFiZWU4YmJmYWQwNDQ3NDMyZDczYTMxOGRiZDU3ZjMyNGIwYjI2MDgifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_c2ea2ed930e04ec4ba00edf8ffb44bf9",
+      "statement": "setup_logging(level) configures logging via a single logging.basicConfig call with the format '%(asctime)s - [Thread %(thread)d] - %(levelname)s - %(message)s', which makes concurrent worker output attributable to individual threads; it is called once from main() after --log is resolved to a numeric level.",
+      "evidence": [
+        {
+          "resource": "repo://sortinfolder.py#L303-L307",
+          "version": "repo-lines-v1:sha256:f73d05a375d8ca03fbc5144a6fd3e415d0c47d132593b6946edaa6f14aa64b94:eyJzZWxlY3RlZExpbmVDb3VudCI6NSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMDFiYTQ3MTljODBiNmZlOTExYjA5MWE3YzA1MTI0YjY0ZWVlY2U5NjRlMDljMDU4ZWY4Zjk4MDVkYWNhNTQ2YiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMDZlMTNmN2ZkMWI0YzgyNWJhMmVjYTg5NzYwZDZjYzY1MDI5NDZmODc2OTRjZmI5MDk2NzA1YjlmODkyNDk5OCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYWIxOGIwMWExMjcwN2I1MjRjNTQ3ZDg4OWI1ZGIzMWYyNTg5ODAwNzBkZjA1YWM3NzYxZjVmODYzMmExNmI5NiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNDk4MGEzNTM5OTBjYTQyNTc1NmM0ZDQ5MTdjMWY0OWQ0OTUyOWNhMDUzMDM2Y2NiOTMzZWIyYzVmMGM3YmU5NiJ9"
+        },
+        {
+          "resource": "repo://sortinfolder.py#L37-L48",
+          "version": "repo-lines-v1:sha256:d0ea33e56646ee501d7345c09a701dcf8320bc0354dd2e8b3d9c7226df14f6d6:eyJzZWxlY3RlZExpbmVDb3VudCI6MTIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI0YjMxN2U0ZWRmMTJlMDlkZWFiNjg0YjRiMmFhMTNkMDczYTFkZjVhN2NiNDA1MDFlYjJkZDhmYWIzYWZiM2QiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImNjZWVkOWRjYjY1YjY2MWE3ZTlmOTAzOGFiNmI4ZDA0M2M3OTg4ZGI1OGNhZmViNWRmY2U3YTFlNGNmOGI0ZTciLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjBmNGI3YzMwN2NlMjM1MDNkNzM0Y2RlNTYzZWVmMjI0N2M0N2E4YWU3M2RkYjJmOTY4MjdmNGQ5MDYxNjE4MjcifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_b8c064776fa041239901385f0cb1b937",
+      "statement": "In dry-run mode process_image writes nothing except that sort_images still creates output_path if missing: the date folder is not created, and the worker logs 'DRY RUN: Would copy ...', 'DRY RUN: Would rotate image ... by N degrees' or 'No rotation needed', and 'DRY RUN: Would add RelativePath tag ...' or 'Would skip tag' instead of copying, rotating, or tagging. test_cli_threads_and_dry_run asserts exit 0, DRY RUN output, and zero files in the output tree.",
+      "evidence": [
+        {
+          "resource": "repo://sortinfolder.py#L196-L212",
+          "version": "repo-lines-v1:sha256:ddae41f9ca4bd90087d7968fc69929b869c148a4516ace01ff3ac43a993fdd9b:eyJzZWxlY3RlZExpbmVDb3VudCI6MTcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImI0N2QxZDI1NDZmMTFmYWYxNzA5YWQzNWZmOTg2ZjBkODU0ZGZkYTg3MTI2ODIwOTE1ZGJlMjM3NDhmNzVjODAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjlmZjg3OWQwNjI0Yjc4MWQxYzIyMTUwMDkyNTJlZGVlNjJkMjY5M2NjMDEwY2ZhMTliMTEyYjYxYjMxMDM5ZGUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjE1ODg0MDc5ZDEzNjY3YjRhYTJkOTg1ZDNiZWE2MTc2NTc2YjdlMzc0YzY1ZGFhMWRkM2M3MDMxYTY4YTVlNjIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjJmMzJlYmQ3Mzk3OTRkNDVmMTQ0MTc1NDhlNzc2MmYxZGRjZWU4MTNlMTFlN2Y5MWY0M2UzOTU3MGQ0ZThmY2UifQ"
+        },
+        {
+          "resource": "repo://sortinfolder.py#L244-L253",
+          "version": "repo-lines-v1:sha256:11034dda9206f1a023c65f7b2bafa5e28dd4df57ef042e7c0161c276d5080c26:eyJzZWxlY3RlZExpbmVDb3VudCI6MTAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjlhZjllYTk2NDM3ZDBmNzNmNmQxZTU3YjhmZGJhZDUyOGE2M2M0MGYzMmI0Y2ViNzA3YWI5NGQ1ZTNkYjUxZTMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImM0Y2Q2MWFkZjZhOTQwZGU2ODQ1ZTg5Y2M2YWM3YzBlNDFhMDFjY2M4ZWEzN2NhZjMyZWQ3MDg2MWYxY2E4MzIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImNhOTgyOTNiOTliMDdhYTVjZDJkY2E3MzI2NzA1NTYzNjQwN2Q3N2ZlODliMzczMTM2ZGVkYmNlOTdlYjBmZmQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjNiOWZmYzAxM2Y1MWRlNzMyMjE1N2IwNTdlYzZlYjFjYmZiNzQ4MjE4OWViMmEwYzVlY2IwYjlhODMwYzAyNzQifQ"
+        },
+        {
+          "resource": "repo://test_sortinfolder.py#L167-L219",
+          "version": "repo-lines-v1:sha256:3149d6f661a5f2e8c1cb1709944e8420383048dc407930789d3dfe336d79241e:eyJzZWxlY3RlZExpbmVDb3VudCI6NTMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjU0ODUwMzIzMTBiZjRkMmY4ZmQ2ZjZmNTc3ZjVjODE3OGM1YjBkMWQ3ZTQ3YzMwODZkYzNiYWMzZmI5MzYxZTUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAwMzgzOWMyZTM3MWYzM2NkYmU0MGQ1NzRlYjNlZTM4ODk3OTIzMjcxMzBhZmVlNWJhNTMwZWEzMGY0ZmExYjQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjJmYzUyZGVkMjk4Y2Y3NmEyY2Y2MjE4MWE3NjdiMjljOTA1NmI0ZWVjZmRjNDcwMzNmMDE0MTk3MDUxMzczMGQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjliODM3N2RkNTAxNWJkNmFmYzVhNzU3OGI2YWJjYmQxMTkxZWJkNDNjNDk3MmU5ZDVhZTRiYzEyMDEwYjQ4N2EifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_f6957f3a2fcd423e9133f837bd867e4d",
+      "statement": "sort_images creates the output directory automatically (os.makedirs(output_path)) if it does not exist, before submitting any work; a nonexistent basepath yields an empty run because os.walk produces nothing.",
+      "evidence": [
+        {
+          "resource": "repo://sortinfolder.py#L238-L249",
+          "version": "repo-lines-v1:sha256:76d513db30f158d15b1461af47c9058e34ea4b0d7918de4392692a5031ae908c:eyJzZWxlY3RlZExpbmVDb3VudCI6MTIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjNhMWY1MWVhNzg4NmM1N2UxZGM3YjM5MWY1M2UwNmI5OGNjYzBhOWM3YTcyMGNhNmM4OTRjZTFjOTgxNDBlOGQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImY0ZjY2ZDRlNGNhNDhkMDE1NTg0OTJhZWE1MTY0ZDg3NDQzY2RlYzY0ODdhOTU4NzFmZjUwMDA1ZDdkYzM0YmYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImIwYzY2MTk0ZmY3MzIzOGIyMWUzNGQ0ZWFjZDc0ZTE3ZWFkZjg1ODI0MDkyZWY2MjczMTUxMDlmNmY3Mjk1NGYifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_ab8c421f7458451fbf3d8485c6423c19",
+      "statement": "The source tree is never modified: process_image copies with shutil.copy2 to output_path and then applies rotation and RelativePath tagging only to the copied file (new_file_path). README notes 'Make sure to back up your images before processing.' Re-runs on an existing output tree get _N collision suffixes rather than overwriting existing files.",
+      "evidence": [
+        {
+          "resource": "repo://README.md#L55-L58",
+          "version": "repo-lines-v1:sha256:1f165ff1cbb5bc00db29bf65eb21c96105abba7b2192fff71cb10a7ca09768f9:eyJzZWxlY3RlZExpbmVDb3VudCI6NCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNjEyMzNlNGE5MzIyNzM0MWE1ZGM5NTA1YWIyOTE2OGJiMGE5NmNhNDI4MDU4YjUwYzdjNTNmODA1NjA5NmEyNiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYWUwNzBkYTY5NWYzM2VlZTlhZDlhNmYxMmNiMmMyYzVkODA3NDEwM2M4ZGY1Y2UzOTZmZjVhNjVlZGU4Y2UzNyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNjViNzBlYTUzMmQ3ZjU2ZjE1YWY4ZmJiZGQ1ZDIzMGQ0Yzk1NWM4MjU0YzZhN2EyZWViZTJiMmUxZGUxZmUzYiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjIsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiOTgyZjQ3NWFlMGZlZjdmOGYxOTEyNmNhZDkzNzY3YzkyNjA4MjQzOWE2ZTZiMzE2NTk3YTc3YzE4ZTgwNGFlNyJ9"
+        },
+        {
+          "resource": "repo://sortinfolder.py#L254-L272",
+          "version": "repo-lines-v1:sha256:f9596d9735c8486db0940ba2f383e2d18e364eba8cb84d83edca0d60fb4df827:eyJzZWxlY3RlZExpbmVDb3VudCI6MTksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImJiNmI5OGVmN2FkOWJjNDNiMDg3Nzk1N2RjNGI5NmE3NzYzODIyOThlYmNhYmRmYzkyNzhkNmE4NTFhNjQyNTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjI0OGI5NWU3ZWQ5ZWRmYjEyNmM0YmYxYWEwZmZmNDVjMTBkOGE5NGRlNDRkMjJhYjUyNjE1MGFkMjkzNTk1NTMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6Ijk2NWIyYjcyNGY0YzA2ZGE3ODk5YzgxNWIxNDYwNzU5NmQ1YTliYmQxMTgxOTE0OThiMGM2OGM3ZjUwZWNlYzcifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_39c047832a914c75b5e83e9b74406c20",
+      "statement": "CI is defined by .ci/ci.yaml pointing image.dockerfile at .ci/test.Dockerfile (python:3.12-slim with pip install --no-cache-dir Pillow exifread piexif, WORKDIR /workspace) and a single unit check whose cmd is the shell-less array [\"python\", \"-c\", \"import sortinfolder\"] — the gate is module importability.",
+      "evidence": [
+        {
+          "resource": "repo://.ci/ci.yaml#L1-L5",
+          "version": "repo-lines-v1:sha256:8302756f66b37d97fbb6b839811b2ad0244e7432e825d4b117c98a8db90d0805:eyJzZWxlY3RlZExpbmVDb3VudCI6NSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMzhjM2Y2OWE5OTg0MzM3NmNjNjdhNDZkNGRlMzA0NDlkZDNiZDM3NDI1NzQ0ZWI0ZGVhNWU1ODQ4MjJjZTA1OCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZjE0M2Y3YzQ5NTBhOGZjMWNlZjVlZDQzMWFjNjcxZmUyZDY0MzUyOWYxZTFjMTUyYzUzODA2MTUyNDY0ZmU0ZSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjAsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZTNiMGM0NDI5OGZjMWMxNDlhZmJmNGM4OTk2ZmI5MjQyN2FlNDFlNDY0OWI5MzRjYTQ5NTk5MWI3ODUyYjg1NSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjAsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZTNiMGM0NDI5OGZjMWMxNDlhZmJmNGM4OTk2ZmI5MjQyN2FlNDFlNDY0OWI5MzRjYTQ5NTk5MWI3ODUyYjg1NSJ9"
+        },
+        {
+          "resource": "repo://.ci/test.Dockerfile#L1-L5",
+          "version": "repo-lines-v1:sha256:2916598626016e003942dbfd90e277bd323ae19c48ef23b1e76f32cd76b31a70:eyJzZWxlY3RlZExpbmVDb3VudCI6NSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNmU5MDQwYjZjMTZiNjVlMzk0MjllMTNmZmYxODk5ZmFmZTNjODA0MmU3NDYxY2Q0N2JjOWZjZGViZTBkNTM3MCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiOGI0NTI3NDU3ODA4OGMxNjZiMTM0YjE5YzA0ZGUzNjI3MTBjZDM0ODM2ZTM5ODg5YzY2NTY2YTE0MmQwMDYxZiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjAsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZTNiMGM0NDI5OGZjMWMxNDlhZmJmNGM4OTk2ZmI5MjQyN2FlNDFlNDY0OWI5MzRjYTQ5NTk5MWI3ODUyYjg1NSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjAsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZTNiMGM0NDI5OGZjMWMxNDlhZmJmNGM4OTk2ZmI5MjQyN2FlNDFlNDY0OWI5MzRjYTQ5NTk5MWI3ODUyYjg1NSJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_30cd855502ec4bf89ac83c095f10f669",
+      "statement": "sort_images submits one process_image future per file found by os.walk(basepath) to a ThreadPoolExecutor(max_workers=threads), counts successes/failures as futures complete via as_completed, and returns the tuple (success_count, failure_count, errors_list).",
+      "evidence": [
+        {
+          "resource": "repo://sortinfolder.py#L253-L273",
+          "version": "repo-lines-v1:sha256:ead527ae2999fab5b3f6ccde268041120cd823b36dea23a9b57eca5a9ca7ca81:eyJzZWxlY3RlZExpbmVDb3VudCI6MjEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImM0Y2Q2MWFkZjZhOTQwZGU2ODQ1ZTg5Y2M2YWM3YzBlNDFhMDFjY2M4ZWEzN2NhZjMyZWQ3MDg2MWYxY2E4MzIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImFlZDU3YzgwMTVjNzRmMDQ5NjNhMDQxOTU3OWFlMWUxMjdlZmQ1OTQ0YTE0MDg5YTljYjI1OThmMzE1MWIxZGMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImIwYzY2MTk0ZmY3MzIzOGIyMWUzNGQ0ZWFjZDc0ZTE3ZWFkZjg1ODI0MDkyZWY2MjczMTUxMDlmNmY3Mjk1NGYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjI3MjIxN2U2YWQ1ZWNkMzRmYjVjY2FkZmI0NmIzN2JiMjk3YzI3MTNjYTk0ZTVhOWUyYjUyMTk1ZTE0NTgwMDkifQ"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.7.3",
+    "at": "2026-11-03T04:36:59.554Z"
+  }
+}

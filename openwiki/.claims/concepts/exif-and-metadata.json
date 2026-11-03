@@ -1,0 +1,122 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:da14e346b13dc4a3c09873b4f7ce7bb232cd753078454e44b547b70b3c64d185",
+  "claims": [
+    {
+      "id": "claim_08920cf1ab914c7593265b9910fc3e04",
+      "statement": "get_date_taken resolves the capture date via exifread.process_file with stop_tag \"EXIF DateTimeOriginal\", parses the tag with datetime.strptime using the format '%Y:%m:%d %H:%M:%S', and on any OSError, KeyError (tag missing), or ValueError (malformed date) logs a warning and falls back to datetime.fromtimestamp(os.path.getctime(path)). It never raises for missing or malformed EXIF, so every supported-format file always yields a datetime for the YYYY/MM/DD folder structure.",
+      "evidence": [
+        {
+          "resource": "repo://sortinfolder.py#L95-L123",
+          "version": "repo-lines-v1:sha256:049c9c823a71185b87c898275f1cf0a560eea6dfeca3586d1129b673a4b9d0ed:eyJzZWxlY3RlZExpbmVDb3VudCI6MjksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI3YzE2MDU4NzA0NmQ5MmMxZmQ2MWQ3MzIyYjQ2MGFmMTI3MDc3NmYxOGNjN2RmOTE5N2EzZGE1YjUzYWIxYTAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjlmNGIxNzdjMjZkY2RmZjZhNDNmYmQ3ODQwODczYTU1MGM4YmMyNThiMjc4MjIzYjYwYWQ1YzY2YmY1ZGNkZTQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImY2YmIxZDc1Yzc1MDc3Mzc2ZTAwNTg3YmQ4YTVhYWIxODM1MmZiYmZiZDQ2ODgzZDM1NzAwNjkwNDc4ODgwM2QifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_6bd41242c4354458aef82befc4eddf03",
+      "statement": "rotate_image_according_to_exif applies rotation only for EXIF Orientation values 3, 6, and 8 — mapping to img.rotate(180, expand=True), rotate(270, expand=True), and rotate(90, expand=True) respectively — and re-saves the file in place (img.save(image_path)) only in those three cases; all other values (including 1 and None) result in no save.",
+      "evidence": [
+        {
+          "resource": "repo://sortinfolder.py#L55-L94",
+          "version": "repo-lines-v1:sha256:a3da03f57c6fb0c71e5d8b9c0269a41919b2c4f6239a7b55e21777472ed51d31:eyJzZWxlY3RlZExpbmVDb3VudCI6NDAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImNlN2QwOTA0MDc3MzBlODM4M2ZhZmUzZGI0NTc4Mzg2M2E4ODQxOThiYTM4ZjkxMzJhYjg0OTA3ZDEwNTc4NmIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImNjNTM3ZjVmYTY5ODJhYTRmNzFlNTkyNjU2MTc0YmJlYjBmY2MzNTZiMDc5YjVlYzVmYzYwZTkzYmMzMzRiNTMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6Ijc0ZTAyMmZhMjBhZWI5M2JjZjhmMzc4ZjY3ZTI2NjA0ZWM4YzczNTJhYzljZjJkNWQwZTZiNjU4OTg4ZTM5MGQifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_82bf38932923482983baab3df5817b05",
+      "statement": "get_exif_orientation reads the raw Orientation tag by calling Pillow's private img._getexif() accessor and scanning PIL.ExifTags.TAGS for the id named 'Orientation'; it returns None when EXIF is absent, and it swallows AttributeError, KeyError, IndexError, and TypeError (logging at debug level and returning None), so it never raises for missing metadata.",
+      "evidence": [
+        {
+          "resource": "repo://sortinfolder.py#L31-L54",
+          "version": "repo-lines-v1:sha256:a85138a8d78bf53505b7d7035b32148b9e88dbfe2dcf9f4bf502f2dde332cd19:eyJzZWxlY3RlZExpbmVDb3VudCI6MjQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjA0NjFlNjkzNzQ5MDVjOWFmZjZiZjFkNzIwNjliMjk5YTA2MDE0NDk1NDVmOWE1YzlmNzMyZGZjNzJlY2VkZjciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImFkOTI4OGNlN2EzYWFjNjg3NGQyNGUwODE0YjNlZWEyZjY3ZmU0YmQ4YTAwMmFlMzZmNzNmNjljMDIwZTA2ZTIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjAwNTU0OWVjMzZlZDkwMzdhZWI5MTRkYmZiNDBhMDgxYTFlYzFhNDc5NzU5M2NhY2MzMTZhNjE1MDg1NDllMDYifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_cb99073b255c4f7faa7e6c35b574b9ee",
+      "statement": "rotate_image_according_to_exif treats truncated image data as non-fatal: an OSError from img.load() is logged as 'Image file is truncated' and the function returns without raising; by contrast, a bare OSError from Image.open is re-raised, and UnidentifiedImageError or struct.error are logged and re-raised, so undecodable files count as per-file failures in the sort_images summary.",
+      "evidence": [
+        {
+          "resource": "repo://sortinfolder.py#L64-L94",
+          "version": "repo-lines-v1:sha256:8184244c8a47887f660732203a50519819d02d1ea60cfac30ee33b425cf7c8b5:eyJzZWxlY3RlZExpbmVDb3VudCI6MzEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQyZWYxODBkYjZhZjk3MGY0M2E1NjNhZTk3ZWJkZGU4N2MxYjdhNzRmOWQ1NzIxNjQwZDc4YjE3ZmVmYWFjYzQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjM5YThlNWU0NjU2YTFlZDYxZDhkYjhiNmNkMGVjNDkxOWZhMmNhODA5ZWYwM2ZiZWMxNjVlZDMwZmRmYWFjM2UiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6Ijc0ZTAyMmZhMjBhZWI5M2JjZjhmMzc4ZjY3ZTI2NjA0ZWM4YzczNTJhYzljZjJkNWQwZTZiNjU4OTg4ZTM5MGQifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_2242ec5d9d954c488e6848210590e07f",
+      "statement": "add_relative_path_tag is gated on a .jpg/.jpeg extension check: for JPEGs it loads the EXIF block with piexif.load, appends b\"\\nRelativePath:\" plus the encoded relative path to the existing UserComment (defaulting to empty bytes), and writes it back via piexif.dump and piexif.insert; for any other extension it logs 'File format not supported for tagging' at info level and leaves the file untouched. The relative path itself is computed by process_image as os.path.relpath(os.path.dirname(file_path), basepath).",
+      "evidence": [
+        {
+          "resource": "repo://sortinfolder.py#L124-L155",
+          "version": "repo-lines-v1:sha256:4662eb379807d0be50fdd295692c41184015006e3539ad8b9456d09fb42ea103:eyJzZWxlY3RlZExpbmVDb3VudCI6MzIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjdjNWQ5OTE0NmNlMzYzMWI0YmY5NmZjNDZiNWNmYWNlYjBiYWQ4OGZiMDI4YThhYTg5MjQwOThmN2VmZDljZjUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImEwZWVjOTExNjQyODc2MGNlNDViNDUyOWVkZmRhMzJhOTMzODhlNWMxODZjODE5MWUwM2UyMzdkOGE1YzVkMTEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImM0M2U4YWRiN2ZmOTg0ZTY4Zjk1ZTdmYmQ4ZDYyODY2ZjAwNGYwYjY5MjQ4YmQ5NTk5OWFlZTFiZmQ2MGVmZjUifQ"
+        },
+        {
+          "resource": "repo://sortinfolder.py#L228-L231",
+          "version": "repo-lines-v1:sha256:33a14cc5752bf2fd8d118c0bd7a2d105335dba70817531896bdc1cc05aeae34a:eyJzZWxlY3RlZExpbmVDb3VudCI6NCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZjJlNjkxNjI2NDdiM2NjYzcwMjYwNjRkM2FkMTgwMTUyM2UyMWUxZGQ3YmQyMTE0YTllZGUzMjFlOGFhMjM5MiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZDgyZjY2Y2Q4MzQ5MWM4NWU5MTNhMmZjOTVmMDRlYmZiZjkzOGFjMDNkOTY4YmIyNzc5MTBjNDUxMWQ5ZWM0MyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiY2U2MjA4NDliZjAyMTkyZWY2OTJmYmM4ODE1OWNiYWQ5ZDM1YzhlNTZhNWRlYzRmOWI1ZTkxYTQ1MjE3ZGJjOSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMDY3YzVkYzJjNTQ2Njk3OWM0YTFmZmJlZDllNDk2NjE0N2QxYjIzZGZlMTRkOWRiODI0N2NmOTlmNjBlN2YwYSJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_f5cf3feaf5f64e9a9ff7081618b75a58",
+      "statement": "Tagging failures are fatal per-file: struct.error from piexif.dump/insert and OSError or piexif.InvalidImageDataError from piexif.load are logged and re-raised by add_relative_path_tag, so a tagging failure counts as a file failure in the run summary rather than being ignored.",
+      "evidence": [
+        {
+          "resource": "repo://sortinfolder.py#L147-L155",
+          "version": "repo-lines-v1:sha256:11e0bb3fd2e3edb312949032ec78712760435f3461645890e84b2892306be39d:eyJzZWxlY3RlZExpbmVDb3VudCI6OSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZTEwZjgzNzcyNWE4MGYyNzkxNzBjMmQzZjgzZWVmN2ZmYjIwNWJiMDhhYjkyODA4NzQ4ZWM1OWFlYWQzNWI1MiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMDFiYTQ3MTljODBiNmZlOTExYjA5MWE3YzA1MTI0YjY0ZWVlY2U5NjRlMDljMDU4ZWY4Zjk4MDVkYWNhNTQ2YiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMzBmZjZhNjNiN2M3YWY3N2RiM2RkMmVlODBiMDIyMjA0NjBiZGI3YzgxYWIzYTk5OTBhNGI1ZTBhN2M3ZTdiZCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYzQzZThhZGI3ZmY5ODRlNjhmOTVlN2ZiZDhkNjI4NjZmMDA0ZjBiNjkyNDhiZDk1OTk5YWVlMWJmZDYwZWZmNSJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_6bf0e5d586854d1bada075d927bf64b7",
+      "statement": "The README claims the script is 'designed for JPEG images', but the code is broader: process_image gates on SUPPORTED_FORMATS = {'.jpg', '.jpeg', '.png', '.heic', '.tiff', '.tif', '.bmp', '.webp'}, so non-JPEG formats are sorted, dated, and copied. The JPEG-only statement is true only of the metadata-sensitive steps: tagging is strictly JPEG-only by extension check, rotation depends on Pillow's _getexif() (absent for other formats, so they are never rotated), and exifread-based dating falls back to file ctime for formats without readable EXIF.",
+      "evidence": [
+        {
+          "resource": "repo://README.md#L55-L55",
+          "version": "repo-lines-v1:sha256:61233e4a93227341a5dc9505ab29168bb0a96ca428058b50c7c53f8056096a26:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNjEyMzNlNGE5MzIyNzM0MWE1ZGM5NTA1YWIyOTE2OGJiMGE5NmNhNDI4MDU4YjUwYzdjNTNmODA1NjA5NmEyNiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNjEyMzNlNGE5MzIyNzM0MWE1ZGM5NTA1YWIyOTE2OGJiMGE5NmNhNDI4MDU4YjUwYzdjNTNmODA1NjA5NmEyNiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNjViNzBlYTUzMmQ3ZjU2ZjE1YWY4ZmJiZGQ1ZDIzMGQ0Yzk1NWM4MjU0YzZhN2EyZWViZTJiMmUxZGUxZmUzYiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiOWM5YjMyMTkwMmFhNjg4NmJjYThmOTdjZmFjMzRjMThiOTZhNThiNmMwZDAzZmYwZGU5ZjVmZmZkZDJlNDQ5YSJ9"
+        },
+        {
+          "resource": "repo://sortinfolder.py#L137-L137",
+          "version": "repo-lines-v1:sha256:263344696ad34d81ea378357b42b435e3d325e08a1d10e65faf8b04f7fb2302e:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMjYzMzQ0Njk2YWQzNGQ4MWVhMzc4MzU3YjQyYjQzNWUzZDMyNWUwOGExZDEwZTY1ZmFmOGIwNGY3ZmIyMzAyZSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMjYzMzQ0Njk2YWQzNGQ4MWVhMzc4MzU3YjQyYjQzNWUzZDMyNWUwOGExZDEwZTY1ZmFmOGIwNGY3ZmIyMzAyZSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYTQwYzg2ZWZlMmIyMDJkZjk1NDNlOWU1MzA4ZDVlOTBiZDc5OTZiZDA4MDgxNzBlNzUyZjAxZWRlY2E1ZDIyOSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYmJiMWYwMTMwNTg2ODM2ZGNkNjg3NWYxZTFkY2M4ZGMzZDFhYTg4ZDNjN2EyNzkyNTFjMTk3MWNkM2Q3MDAwMSJ9"
+        },
+        {
+          "resource": "repo://sortinfolder.py#L14-L14",
+          "version": "repo-lines-v1:sha256:3d6736310a342ab3d94bd8510c28362fd4303bcb954def994520df424363416a:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiM2Q2NzM2MzEwYTM0MmFiM2Q5NGJkODUxMGMyODM2MmZkNDMwM2JjYjk1NGRlZjk5NDUyMGRmNDI0MzYzNDE2YSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiM2Q2NzM2MzEwYTM0MmFiM2Q5NGJkODUxMGMyODM2MmZkNDMwM2JjYjk1NGRlZjk5NDUyMGRmNDI0MzYzNDE2YSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMmZhZTBkM2JhYTkxMDhiOTcxYWI1OWU4MWUyY2MyMjcwZjY5ZDI3MTA0MTYxNmY1ZmM3MDMyMTJlNzM0ZTQ5OSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZTVjMWM0NjJlMmEzOWQ3NDc1OWY1ZTFiMTI2Zjc2ODNhMmI3MzAxMThlMThmNTEyMmIwOGNlZGVlYjY1MGUyMyJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_f996d772ec3548d08ef4fab9aa8c3ef9",
+      "statement": "In --dry-run mode process_image simulates the metadata steps without modification: it opens the source file, calls get_exif_orientation, and logs 'Would rotate image <path> by <angle> degrees' (or 'No rotation needed'); it also logs the would-be RelativePath tag only for .jpg/.jpeg destinations, while a failure to open the source is logged as a warning, not a counted failure.",
+      "evidence": [
+        {
+          "resource": "repo://sortinfolder.py#L198-L216",
+          "version": "repo-lines-v1:sha256:eaa0722d494ac13069a55c0710da0d63ff800b329cbd6e0f7ea5665f119a545c:eyJzZWxlY3RlZExpbmVDb3VudCI6MTksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjVhMWQ1YjM1MTAwNDU0N2IzMTI5MzhmMWI3MGZlY2UxYTRlNzNkZDk0NWExNzAyZjlmZGQzMDFjNDUwNTMzYmIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImExODgwMWIxODg2N2MwYjAyODNlNzgyMjFiNTI1ZjY0OGY0OTE1ZTU0ZjA1NWMxYzBmMWQ1MDQyZjAxZjgxMjciLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImVkMWE1OTg0NDJmMzRmZDdlM2U0OGZjM2Y2MDBhYzJmYzJjYWZiMzE3Yzk2NjYyMzY2MDhiNjYxNTU2Y2UzZjgiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjI3ZWJiNWIyMDU0NmRlOTExYmEwM2JmZGM4N2M1OTYyZDVmYWMyOGQ3YmMxZjZkM2UxMTUyNTRhN2EzMjNhNTgifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_c317d759dab64619a1ba779b45e41214",
+      "statement": "Within process_image the EXIF work follows a fixed order on the destination copy — get_date_taken on the source, shutil.copy2 to the output folder (preserving EXIF), then rotate_image_according_to_exif on the copy, then add_relative_path_tag on the copy — so the source tree is never mutated and the tag is written onto the already-rotated file.",
+      "evidence": [
+        {
+          "resource": "repo://sortinfolder.py#L217-L231",
+          "version": "repo-lines-v1:sha256:a525bac8ebc8dbea37bbc3f25d5677fd703e79bb122363276b31ccf35b62eb1c:eyJzZWxlY3RlZExpbmVDb3VudCI6MTUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQ4MmY2NmNkODM0OTFjODVlOTEzYTJmYzk1ZjA0ZWJmYmY5MzhhYzAzZDk2OGJiMjc3OTEwYzQ1MTFkOWVjNDMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjViYjFkZmI0ZTVkNjFiMWQ5NjM4Y2U2ODY5ZjliYmQwOGZlNzEwMjYyYjI4ZDlhODg2YTU2NDUwOTk3N2RhYTYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjA2N2M1ZGMyYzU0NjY5NzljNGExZmZiZWQ5ZTQ5NjYxNDdkMWIyM2RmZTE0ZDlkYjgyNDdjZjk5ZjYwZTdmMGEifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_d3a0a361056b4c44b50d45a172a7ae1e",
+      "statement": "test_process_image_supports_multiple_formats pins the metadata behavior across formats: a JPG and TIFF with DateTimeOriginal land in the expected date folder, an EXIF-less PNG is still copied but falls back to its file creation date, the copied JPG is verified to contain b'RelativePath:' in its EXIF UserComment, and the copied TIFF is verified to exist without such a tag.",
+      "evidence": [
+        {
+          "resource": "repo://test_sortinfolder.py#L94-L166",
+          "version": "repo-lines-v1:sha256:f7d706c2863dc18344b1a9cc580034e8caee79e11da895315e1670f5649bd090:eyJzZWxlY3RlZExpbmVDb3VudCI6NzMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImYzY2EzN2I3Y2M2OGVlZWM4ZTlmM2ZhNDRhMDNmZDg2YTFlMjQ3Y2YyYzU1NzhhODk2NDQxOGUwNTk0NGUyOTAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImFlZmE1M2VhNWNkMzA4NDg1ZDk0NzA3YzZhMTk0ZWJkZTBkMDFiYTM5MmFiNDUzZmI5NmVlMzg4OWVlMjk4NTAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImQ0ZWUwNTUxZDViYjM0MTZiMjNiNjE5Y2QyZDk0NTM2ZWZiMzMwNzJkMjJmNWMyMmIxMjVlZGZjMGFlZTA2YTcifQ"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.7.3",
+    "at": "2026-11-03T04:36:59.554Z"
+  }
+}
