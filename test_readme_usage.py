@@ -4,6 +4,7 @@ import re
 import pytest
 
 README = pathlib.Path(__file__).parent / "README.md"
+TEST_DOCKERFILE = pathlib.Path(__file__).parent / ".ci" / "test.Dockerfile"
 
 BUILD_CMD = "docker build -t sortimages-test -f .ci/test.Dockerfile ."
 RUN_PREFIX = "docker run --rm -v \"$PWD\":/workspace sortimages-test"
@@ -54,3 +55,19 @@ def test_readme_documents_docker_run_for_readme_usage(readme_text):
     assert "docker run" in section
     assert "/workspace" in section
     assert RUN_README_USAGE in section
+
+
+def test_test_dockerfile_installs_pytest():
+    assert TEST_DOCKERFILE.exists(), ".ci/test.Dockerfile fehlt im Repository"
+    dockerfile_text = TEST_DOCKERFILE.read_text(encoding="utf-8")
+    pip_install_lines = [
+        line.strip()
+        for line in dockerfile_text.splitlines()
+        if line.strip().startswith("RUN pip install")
+    ]
+    assert pip_install_lines, (
+        ".ci/test.Dockerfile enthaelt keine pip-install-Zeile"
+    )
+    assert any("pytest" in line.split() for line in pip_install_lines), (
+        ".ci/test.Dockerfile installiert pytest in der pip-install-Zeile nicht"
+    )
