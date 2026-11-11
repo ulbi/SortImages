@@ -1,18 +1,18 @@
 {
   "schemaVersion": 1,
-  "pageVersion": "sha256:4102ad822a4972b71748bd6785db1f3455f06f0e44489eeef5b68fd0c10237bc",
+  "pageVersion": "sha256:025d0799f28fce290b07c02bc2afd622b91c7ae8dc491988ae4db5381d3f649e",
   "claims": [
     {
       "id": "claim_91e318f96cb34e2f8c92fadae7c37cb3",
-      "statement": "test_sortinfolder.py is a single pytest file with seven tests spanning two invocation styles: CLI-level tests run [sys.executable, \"sortinfolder.py\", ...] as a subprocess to assert on exit codes, log output, and --help text, while unit-level tests import process_image or sort_images directly to assert on return values and internal state. The file's __main__ block also runs all seven tests sequentially as a standalone smoke runner without pytest.",
+      "statement": "test_sortinfolder.py is a single pytest file with seven tests spanning two invocation styles: CLI-level tests run [sys.executable, \"sortinfolder.py\", ...] as a subprocess to assert on exit codes, log output, and --help text, while unit-level tests import process_image or sort_images directly to assert on return values and internal state. The file's __main__ block invokes six of the seven test functions sequentially as a standalone smoke runner without pytest and omits test_cli_exit_code_end_to_end.",
       "evidence": [
         {
-          "resource": "repo://sortinfolder.py#L316-L317",
-          "version": "repo-lines-v1:sha256:9a6a7ffeed1af83ced837054949e0b2fdf0e568fe3d4c2e20c229ec0a9707cc3:eyJzZWxlY3RlZExpbmVDb3VudCI6MiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZjQ4NmZmNWNmOTM2M2I0NDI5MzM2ODAzYjJjOTYwZTczZGE4YzQ3ZmEwYzZmNjc2NThkMTRiMzIzY2QyMmQzNCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMThlOTkyMzJjZDNhMzA5ZjUwY2JkNmY2NjIxMjdlZWFhZmNlMWY3MzYyOTJkZWZiMTEzZDk4MWEyMGM3ZDg1MiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNTdkNDg4MTRmZDIwNDZiOTg4MjlmZDZlNzA5MDkwN2E4OWFkOWIwNGMwYmM5MzE1NjA0ZTQ1MzBhN2VmM2IzNSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjAsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZTNiMGM0NDI5OGZjMWMxNDlhZmJmNGM4OTk2ZmI5MjQyN2FlNDFlNDY0OWI5MzRjYTQ5NTk5MWI3ODUyYjg1NSJ9"
+          "resource": "repo://test_sortinfolder.py#L11-L395",
+          "version": "repo-lines-v1:sha256:949d5102fec26cbce2fb7f1223007376c15364e8cb9a861a93701ecaef2fef55:eyJzZWxlY3RlZExpbmVDb3VudCI6Mzg1LCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiIyZjNkZDllZDFlYmY3YjdhZjE1NjI5ZDE4NGFhNzA4OWU4YTA4MzU0ZmU3ZDcwZDI0MmM1ZGIxMDJlNDhmZTRhIiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiI2YTg4MGY4NmY1YjRlNDJlZWZhZDllMjA1ZTY2OTgyY2UzZDVmYzA2N2JmYTZmZGE5MGFkOGEwNzVjOTM0MGEwIiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiI5Y2I4Njk3NmExNmI2NDUwOTMwYzk1NzQyYWIyNWVkYjVkZmUyNGY5NjE0NGIyYWRiZTEwYjhiODBmYWFjZTUxIiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MywiZm9sbG93aW5nQ29udGV4dEhhc2giOiIzZDQxMzQwY2MyMzlhMTU5Y2U5YjYwMjJlOWY2MzIyODMyZTJlYWQ3NmNhZTllNDc1NGQyMTBlYjhmYjZkNWU4In0"
         },
         {
-          "resource": "repo://test_sortinfolder.py#L11-L325",
-          "version": "repo-lines-v1:sha256:261d980eeab3bfe217203e285864bfff6fccd779efcf686fd4335a798c9198a5:eyJzZWxlY3RlZExpbmVDb3VudCI6MzE1LCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiIyZjNkZDllZDFlYmY3YjdhZjE1NjI5ZDE4NGFhNzA4OWU4YTA4MzU0ZmU3ZDcwZDI0MmM1ZGIxMDJlNDhmZTRhIiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiIyZDkxZjA5N2M2YTQ5YjA4M2I3NTUyMjIyNjgxMzYyYjI2YzdlMTk1N2RiMGY2YTM1NWQ4MzdmZTViODUzYjM4IiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiI5Y2I4Njk3NmExNmI2NDUwOTMwYzk1NzQyYWIyNWVkYjVkZmUyNGY5NjE0NGIyYWRiZTEwYjhiODBmYWFjZTUxIiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MywiZm9sbG93aW5nQ29udGV4dEhhc2giOiJiNTU4OTE2Y2U0NmQ4ZjlkNTY3YTE1YmRkYzE3NDg0MTg0ZDVjMzIxNWVlZTFhMTE1MGMzMzdlMTUxNzNlZmI5In0"
+          "resource": "repo://test_sortinfolder.py#L398-L414",
+          "version": "repo-lines-v1:sha256:f9836497c17cd1ca34be3adecb1ca3f64a8cde5e13b19ae05810b20e947c4b5f:eyJzZWxlY3RlZExpbmVDb3VudCI6MTcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImY0ODZmZjVjZjkzNjNiNDQyOTMzNjgwM2IyYzk2MGU3M2RhOGM0N2ZhMGM2ZjY3NjU4ZDE0YjMyM2NkMjJkMzQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjBiODkzNjU4MzhjMzkyZTg5MGVmYjM0NTRmZmY0NTAwZTVhMjJmMjFmY2U5ZjNhZDE5ZTE2MjYxNjc1NzNkNjYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjcyYjBlMTAzYjFlOTUzYTQxODNjZWZkODI3MTk1ZGE2OWZiNjQ3OGQ4MjMyOTI0MjdmZmMxOTBjNmQ4MmM4MzYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjoxLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImJiZTQzMGMxYjc4NGY3MTQ0OTBhNTI1NzdiODFmYjJjNmQzZjg3NDc0M2FjYTYxNDM4NWI1MDVmNzU3NDAyZjQifQ"
         }
       ]
     },
@@ -52,7 +52,7 @@
     },
     {
       "id": "claim_b55e8286d6824bfdbddae682c47e8095",
-      "statement": "test_process_image_supports_multiple_formats proves multi-format processing: EXIF-stamped JPG and TIFF are copied into output/2024/06/15, an EXIF-less PNG is still copied (date falls back to file ctime), the output JPG gains a 'RelativePath:' entry in its EXIF UserComment (verified with piexif.load), and the TIFF is copied but not tagged. This contradicts the README's 'designed for JPEG images' note; SUPPORTED_FORMATS in sortinfolder.py actually accepts .jpg, .jpeg, .png, .heic, .tiff, .tif, .bmp, .webp, and the tests are the authoritative source of truth on format support.",
+      "statement": "test_process_image_supports_multiple_formats proves multi-format processing: EXIF-stamped JPG and TIFF are copied into output/2024/06/15, an EXIF-less PNG is still copied (date falls back to file ctime), the output JPG gains a 'RelativePath:' entry in its EXIF UserComment (verified with piexif.load), and the TIFF is copied but the test only asserts its existence rather than directly asserting the absence of a tag. This contradicts the README's 'designed for JPEG images' note; SUPPORTED_FORMATS in sortinfolder.py actually accepts .jpg, .jpeg, .png, .heic, .tiff, .tif, .bmp, .webp, and the tests are the authoritative source of truth on format support.",
       "evidence": [
         {
           "resource": "repo://sortinfolder.py#L13-L13",
@@ -66,11 +66,11 @@
     },
     {
       "id": "claim_8b71bc5b28d845b4a129b63076ea7a6e",
-      "statement": "test_cli_threads_and_dry_run runs the CLI with --threads 5 --dry-run and asserts exit code 0, a 'DRY RUN' indication in combined stdout+stderr (logging goes to stderr), the target date folder 2024/06/15 and filename test.jpg named in the log, and that the output directory contains no files — proving dry-run simulates the plan without any filesystem writes.",
+      "statement": "test_cli_threads_and_dry_run runs the CLI with --threads 5 --dry-run and asserts exit code 0, a 'DRY RUN' indication in combined stdout+stderr (logging goes to stderr), the target date folder 2024/06/15 and filename test.jpg named in the log, and that the output directory contains no files — proving dry-run simulates the plan without copying any files. The guarantee is 'no files copied', not literally 'no filesystem writes': sort_images may still create the top-level output_path before planning, and the test only asserts zero files in the tree.",
       "evidence": [
         {
-          "resource": "repo://sortinfolder.py#L211-L229",
-          "version": "repo-lines-v1:sha256:1f2be995563dc4793b2fe7c3e371694f5bfca56b138b25ef27757284a1b50d77:eyJzZWxlY3RlZExpbmVDb3VudCI6MTksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImE5N2I0N2JiODFjZTkzY2JhNjdhZmMwODY5OGE4MGNmYTA5M2E4NjY3ZTljOWY5NjUzMzc4MThkNjU3OGQxODUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImE0ZjQzMDEyYjIzZTljNWI4N2U4ZTczNWE1ZTcwYmM3ZGQyMTkxYzI3ZGFiMDUxZGJkMGE0ODY3MmUwZjM1OWYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijg4ZmE3NDM3ZjdiZmQzZGQ4YzhiYjNiYTUzNTBkZWU0MTQ3NTNkODJjOWI1YTQxNTlhMzViMDFjOTgyOGYzNDgiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjA2YjA4OTIwNTExOTM0ODVmZjY3ZjI4NzI4MjE2M2JlYTgyODgyZmZkMTBhOGRlZTc5NTg0ZWM2OGVkOWQyZGIifQ"
+          "resource": "repo://sortinfolder.py#L156-L222",
+          "version": "repo-lines-v1:sha256:4cba12c54bf60b69699fd47360b25efa8e7b04845cc0729230922e6b89c4db14:eyJzZWxlY3RlZExpbmVDb3VudCI6NjcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImJjMDY5OGUxOTE3NzcxZmY1ZjYxMTIwNDMwMjRkZjE5ODJkOGVhNjFkY2Q1YjgwZTJlZmJkMTNjMzJmYmUyNjgiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjYwZDk1ODhiNGQ0MTVjNGYyYjQwZjg0YTE2M2ZmY2VmOWRjYTZiNWRhMWViNWE4YmY1OTE2YjliY2M0YWVjYTQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImE0OGRlNTcxMTM0OTNhODE0ZDc2NjBlNTg4NjZmMTEyYTM4YjQ5MjMzOGMxMmE0NDYwYzUxMTNhM2NkYWVjY2QifQ"
         },
         {
           "resource": "repo://test_sortinfolder.py#L167-L221",
@@ -136,7 +136,7 @@
     }
   ],
   "verification": {
-    "by": "openwiki/0.7.3",
-    "at": "2026-11-03T04:36:59.554Z"
+    "by": "openwiki/0.9.0",
+    "at": "2026-11-11T09:15:33.931Z"
   }
 }

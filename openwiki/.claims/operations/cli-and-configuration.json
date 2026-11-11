@@ -1,32 +1,32 @@
 {
   "schemaVersion": 1,
-  "pageVersion": "sha256:cbc7842009ccf3e0b1636a877780440402245c7e7bfafac4dbbef69d0d5af540",
+  "pageVersion": "sha256:5feca6d2f69a7fe959e14bb8b5a70e7088a0bae8a5135ee0cea78c1f06bf25dd",
   "claims": [
     {
       "id": "claim_c087983b592449d1bae57fa43a0da6ba",
-      "statement": "main() validates --log immediately after parsing: the value is upper-cased and looked up via getattr(logging, args.log.upper(), None); a non-int result raises TypeError(\"Invalid log level: {args.log}\") before logging is configured or any file is processed. Default is \"INFO\".",
+      "statement": "main() validates --log immediately after parsing: the value is upper-cased and looked up via getattr(logging, args.log.upper(), None); a non-int result raises TypeError(\"Invalid log level: {args.log}\") before logging is configured or any file is processed. Default is \"INFO\". Because the lookup uses an unqualified attribute name, standard names such as DEBUG, INFO, WARNING, WARN, ERROR, FATAL, CRITICAL, and NOTSET are accepted, while a dotted spelling such as logging.DEBUG is not.",
       "evidence": [
         {
-          "resource": "repo://README.md#L55-L58",
-          "version": "repo-lines-v1:sha256:1f165ff1cbb5bc00db29bf65eb21c96105abba7b2192fff71cb10a7ca09768f9:eyJzZWxlY3RlZExpbmVDb3VudCI6NCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNjEyMzNlNGE5MzIyNzM0MWE1ZGM5NTA1YWIyOTE2OGJiMGE5NmNhNDI4MDU4YjUwYzdjNTNmODA1NjA5NmEyNiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYWUwNzBkYTY5NWYzM2VlZTlhZDlhNmYxMmNiMmMyYzVkODA3NDEwM2M4ZGY1Y2UzOTZmZjVhNjVlZGU4Y2UzNyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNjViNzBlYTUzMmQ3ZjU2ZjE1YWY4ZmJiZGQ1ZDIzMGQ0Yzk1NWM4MjU0YzZhN2EyZWViZTJiMmUxZGUxZmUzYiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjIsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiOTgyZjQ3NWFlMGZlZjdmOGYxOTEyNmNhZDkzNzY3YzkyNjA4MjQzOWE2ZTZiMzE2NTk3YTc3YzE4ZTgwNGFlNyJ9"
+          "resource": "repo://README.md#L32-L38",
+          "version": "repo-lines-v1:sha256:96a68031d0369f53238e8ba95f36a02dac2f30a07d47d82c7233a60b257d69d6:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNTg1ZGVmMTczNjhjN2NhOGUyOTZlNDIzZjY1Y2Q4ZWIwYTFmODcxZmUyMjkxMDg5ZTc3MWNhNzg3MWI1ZWViNyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNWM5NWU1NDgwM2Q0N2U1MDA2ZDUxMWU1ZWRjNzZkMmZjZDAxYzljMWNjMDg2ODY1MDA1MDlkNjg1NDc2MjI5OSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiY2E4OWI5ZjdkNmMxOTQxMTZkMWE3N2M4M2MxYTQ4YjE1NDI2OGE4YjVkNzhkMzYyNWM2YTNkYTE1MTIyOGJiYyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiODQ5NDBmYjhmMDRlNjNmNDY1MGE0NmFkOThkOTQ2N2ZlZTBlMWNlMDgzYzJiYjJkMTg4OTZhYjA2YzIyM2M0NSJ9"
         },
         {
-          "resource": "repo://sortinfolder.py#L297-L307",
-          "version": "repo-lines-v1:sha256:5eb13e7915a792967b5cdd3cb2a6ba33749d5f18bca816dd33074b2dec13605a:eyJzZWxlY3RlZExpbmVDb3VudCI6MTEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjE0YmI4NTljZmRjODg1ZTM3OTgzNDEwMjIyYmM3ZTVhMDkxNGVhMmVjMDBlOWE0OTA2Njk4M2I1ZTJkODA5ZTIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjA2ZTEzZjdmZDFiNGM4MjViYTJlY2E4OTc2MGQ2Y2M2NTAyOTQ2Zjg3Njk0Y2ZiOTA5NjcwNWI5Zjg5MjQ5OTgiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjVmY2E0ZjIyZTQyYTk0MWZmOGE3NTUxMjE5ODRlNmU3ZDgxMTMzYTEzMDY1N2Q0YjBkNjdiZjE5MDczMTk2MDYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjQ5ODBhMzUzOTkwY2E0MjU3NTZjNGQ0OTE3YzFmNDlkNDk1MjljYTA1MzAzNmNjYjkzM2ViMmM1ZjBjN2JlOTYifQ"
+          "resource": "repo://sortinfolder.py#L277-L311",
+          "version": "repo-lines-v1:sha256:ce066b6a600c3ee4b5a443a9cae1a325f83a46da688fbf2b37947d53a1bad540:eyJzZWxlY3RlZExpbmVDb3VudCI6MzUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImMyZTMxMjU3ZGMwYWUxZDU5MzAzN2MyODBjOWFkNTA4MTliOGE2YzhjZjcyOGJlMDcxNmQwMGEzZWVjYzA0YmIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImMyNDE5YTRhOGQ4NWQxMWUyZTAwNzE0OGQ3MjhlY2VkODQxZmViMTJhMjAxMDlhY2E4NmVkMzg5NTk3MTNkNzciLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjI3MjIxN2U2YWQ1ZWNkMzRmYjVjY2FkZmI0NmIzN2JiMjk3YzI3MTNjYTk0ZTVhOWUyYjUyMTk1ZTE0NTgwMDkiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjY2MjhlNzY4ZjM4NzA3MjIyZWQxYjU1MTJmYmU1YWJjMTI3ZTFjYzA2Y2M4NmE1ZTQzZDE2Yjc5NWJiNGY1ZWQifQ"
         }
       ]
     },
     {
       "id": "claim_295294e33b114bf9bee7f864b6fdbb33",
-      "statement": "--threads is not validated at parse time in main(); it is passed through to sort_images, which enforces the bound 1 <= threads <= 100 and raises ValueError (\"threads must be between 1 and 100, got {threads}\") otherwise. test_cli_invalid_threads_value verifies subprocess runs with --threads 0 and --threads 101 both exit non-zero.",
+      "statement": "--threads is not validated at parse time in main(); it is passed through to sort_images, whose first operation enforces the bound 1 <= threads <= 100 and raises ValueError (\"threads must be between 1 and 100, got {threads}\") otherwise, before the output directory is created or any file is walked. test_cli_invalid_threads_value verifies subprocess runs with --threads 0 and --threads 101 both exit non-zero.",
       "evidence": [
         {
-          "resource": "repo://sortinfolder.py#L223-L238",
-          "version": "repo-lines-v1:sha256:8e102bcd23223254190dc70663553aca745dbe3a5d95cb979e46d8dfd0ece074:eyJzZWxlY3RlZExpbmVDb3VudCI6MTYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjcwZTkwZDQ5ZjI2ZDJhNTg4NjQzNjE5ZGZlYWFjNGI0NmM5YjAxZjg4NzI2YmIxYmQ1MWJmNzVkZDIxMzg0ZjMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjlmM2Q3NmNmYjZlYTUyZWM0ZGM3MDVjOTJiOTUzMDFjZDA4YjNlMTg1OTRiMWJlYzI2MWJiYjE2NmMzMDgyYTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjQwZmVjNTc1MTk4MTU2MWVlMTE0YWNjMzkzNjIwYmI3MDg5MTE5OTJiZWE2MzE5MmYxOGZhMDYzZjEyYmIyOWQifQ"
+          "resource": "repo://sortinfolder.py#L223-L249",
+          "version": "repo-lines-v1:sha256:2a0f43fb098a8e41fd226550904d7899145f759945b31410201bfaea0201d7fe:eyJzZWxlY3RlZExpbmVDb3VudCI6MjcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjcwZTkwZDQ5ZjI2ZDJhNTg4NjQzNjE5ZGZlYWFjNGI0NmM5YjAxZjg4NzI2YmIxYmQ1MWJmNzVkZDIxMzg0ZjMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjNhMWY1MWVhNzg4NmM1N2UxZGM3YjM5MWY1M2UwNmI5OGNjYzBhOWM3YTcyMGNhNmM4OTRjZTFjOTgxNDBlOGQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjlmM2Q3NmNmYjZlYTUyZWM0ZGM3MDVjOTJiOTUzMDFjZDA4YjNlMTg1OTRiMWJlYzI2MWJiYjE2NmMzMDgyYTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImIwYzY2MTk0ZmY3MzIzOGIyMWUzNGQ0ZWFjZDc0ZTE3ZWFkZjg1ODI0MDkyZWY2MjczMTUxMDlmNmY3Mjk1NGYifQ"
         },
         {
-          "resource": "repo://sortinfolder.py#L296-L311",
-          "version": "repo-lines-v1:sha256:f56330e6584cd02c051994331695092c9f979cfe447d55c91bf1461f72e3dfd9:eyJzZWxlY3RlZExpbmVDb3VudCI6MTYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjMwYzFmMTg4ZjE0MmVkN2E4MjQ2ODBiMjA3MTcyYzU1MTliYzYxNGE0OGZkYTdjZjE2N2VkYjhkZGY3OTk1NmMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImMyNDE5YTRhOGQ4NWQxMWUyZTAwNzE0OGQ3MjhlY2VkODQxZmViMTJhMjAxMDlhY2E4NmVkMzg5NTk3MTNkNzciLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjhjMzIyZGUwZTlmY2FiNWEzMDk1N2E1ZmI2NGZiOWY0ZDgwZjA5YzMxODg0M2M2MDc2YjRkOTcyNWUwODk0MDAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjY2MjhlNzY4ZjM4NzA3MjIyZWQxYjU1MTJmYmU1YWJjMTI3ZTFjYzA2Y2M4NmE1ZTQzZDE2Yjc5NWJiNGY1ZWQifQ"
+          "resource": "repo://sortinfolder.py#L277-L314",
+          "version": "repo-lines-v1:sha256:df39c0b90b634b315de81d15814979f6ce76afd38725b03971c6d75ed9e8f89d:eyJzZWxlY3RlZExpbmVDb3VudCI6MzgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImMyZTMxMjU3ZGMwYWUxZDU5MzAzN2MyODBjOWFkNTA4MTliOGE2YzhjZjcyOGJlMDcxNmQwMGEzZWVjYzA0YmIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjJmYTIwODU4YWY2NDI0N2FhNDdmMzFkMWUwMDQ0ZjcxMDc1NmJkMjc0Y2Y1MmYwODk3ZjgxNTU3YzU1MjViZjciLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjI3MjIxN2U2YWQ1ZWNkMzRmYjVjY2FkZmI0NmIzN2JiMjk3YzI3MTNjYTk0ZTVhOWUyYjUyMTk1ZTE0NTgwMDkiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjAzMmU2OTIyNTE4NDY1ZGVlOTg3MGU3NjAxNjU0YWVkZWI4OThiODQ5ZmJmNmMzZjA0OGM4YzE5MmY3M2JmMGUifQ"
         },
         {
           "resource": "repo://test_sortinfolder.py#L222-L245",
@@ -120,7 +120,7 @@
     },
     {
       "id": "claim_39c047832a914c75b5e83e9b74406c20",
-      "statement": "CI is defined by .ci/ci.yaml pointing image.dockerfile at .ci/test.Dockerfile (python:3.12-slim with pip install --no-cache-dir Pillow exifread piexif, WORKDIR /workspace) and a single unit check whose cmd is the shell-less array [\"python\", \"-c\", \"import sortinfolder\"] — the gate is module importability.",
+      "statement": "CI is defined by .ci/ci.yaml pointing image.dockerfile at .ci/test.Dockerfile (python:3.12-slim with pip install --no-cache-dir Pillow exifread piexif, WORKDIR /workspace) and a single unit check whose cmd is the shell-less array [\"python\", \"-c\", \"import sortinfolder\"]. The unit job only imports the module and does not run pytest or the behavioral test file, so the gate is module importability.",
       "evidence": [
         {
           "resource": "repo://.ci/ci.yaml#L1-L5",
@@ -141,10 +141,104 @@
           "version": "repo-lines-v1:sha256:ead527ae2999fab5b3f6ccde268041120cd823b36dea23a9b57eca5a9ca7ca81:eyJzZWxlY3RlZExpbmVDb3VudCI6MjEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImM0Y2Q2MWFkZjZhOTQwZGU2ODQ1ZTg5Y2M2YWM3YzBlNDFhMDFjY2M4ZWEzN2NhZjMyZWQ3MDg2MWYxY2E4MzIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImFlZDU3YzgwMTVjNzRmMDQ5NjNhMDQxOTU3OWFlMWUxMjdlZmQ1OTQ0YTE0MDg5YTljYjI1OThmMzE1MWIxZGMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImIwYzY2MTk0ZmY3MzIzOGIyMWUzNGQ0ZWFjZDc0ZTE3ZWFkZjg1ODI0MDkyZWY2MjczMTUxMDlmNmY3Mjk1NGYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjI3MjIxN2U2YWQ1ZWNkMzRmYjVjY2FkZmI0NmIzN2JiMjk3YzI3MTNjYTk0ZTVhOWUyYjUyMTk1ZTE0NTgwMDkifQ"
         }
       ]
+    },
+    {
+      "id": "claim_fac2fee4c70049ea9239814b1ddab5f4",
+      "statement": "Argparse owns command-line shape errors: a missing required positional path, an unknown option, or a non-integer --threads value is rejected before the processing body runs and produces argparse's standard usage-error exit status 2.",
+      "evidence": [
+        {
+          "resource": "repo://sortinfolder.py#L277-L303",
+          "version": "repo-lines-v1:sha256:7ce749e939c00da0359db68885e5ba41eeef68dcc4ded5ff1a0798c0d1978d4a:eyJzZWxlY3RlZExpbmVDb3VudCI6MjcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImMyZTMxMjU3ZGMwYWUxZDU5MzAzN2MyODBjOWFkNTA4MTliOGE2YzhjZjcyOGJlMDcxNmQwMGEzZWVjYzA0YmIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjI3MjIxN2U2YWQ1ZWNkMzRmYjVjY2FkZmI0NmIzN2JiMjk3YzI3MTNjYTk0ZTVhOWUyYjUyMTk1ZTE0NTgwMDkiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjY3ZWMyZDNjZDFkMzdhNGE3ZTc1M2Q2MjA4YzEyOWFlN2JlNjdjZDk3NTgzNmI2N2QyYWViMTYzN2VjYmNmZDQifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_4baec3552bcc4948821797b5b4d242be",
+      "statement": "sort_images submits every regular file discovered under basepath regardless of extension, so unsupported formats return normally and are counted as successes; the Processed and Succeeded totals therefore describe submitted files rather than the number of generated output images.",
+      "evidence": [
+        {
+          "resource": "repo://sortinfolder.py#L156-L168",
+          "version": "repo-lines-v1:sha256:ef8f4977b42260035f01bf612a53a61b3dd515be3fa7de3ed325a086433d7376:eyJzZWxlY3RlZExpbmVDb3VudCI6MTMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImJjMDY5OGUxOTE3NzcxZmY1ZjYxMTIwNDMwMjRkZjE5ODJkOGVhNjFkY2Q1YjgwZTJlZmJkMTNjMzJmYmUyNjgiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQyZWYxODBkYjZhZjk3MGY0M2E1NjNhZTk3ZWJkZGU4N2MxYjdhNzRmOWQ1NzIxNjQwZDc4YjE3ZmVmYWFjYzQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjYwZDk1ODhiNGQ0MTVjNGYyYjQwZjg0YTE2M2ZmY2VmOWRjYTZiNWRhMWViNWE4YmY1OTE2YjliY2M0YWVjYTQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6Ijc2YjAzNTJlN2IzY2IwMWIzZGUxMDI1ZDM2NGZkODI3NzhiMjhhYWUzNDk5YWM0MzczZTVlYzgwMTRiYmU4ZGMifQ"
+        },
+        {
+          "resource": "repo://sortinfolder.py#L246-L274",
+          "version": "repo-lines-v1:sha256:25497b2f842e63fdd6d67a85d65c7b2aabe16ddf8877eb8bdf33d0169367ce0b:eyJzZWxlY3RlZExpbmVDb3VudCI6MjksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImUzMWY2MDgyYWQyNmY2ZDM2ZGMyNjY2MzU2ZTQxODk1Y2M2OTZiMDE1NzNkNjQyOTlkNmMxZjA1NGNlZTJiMDAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImExZmQxNmM4NWI1ZGZmZmMxMzZkMTViYjE1ODgxYjNlZTkzNDI5ZDA1ZDkyNjExMmFkNmJlNTJhN2Y4ZDE0MTQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjBhZjM2Mzk2MTFlMGI1MGE0Zjk4OGI1NzE2N2VjYWYzOTc3NjU2ZTc3ZDMxY2M1NjFiYmE2ZmQxMzc3MmM4ZTkifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_e6c25812be9948a39e0e5466deeeab68",
+      "statement": "Copying precedes rotation and tagging, and there is no rollback: if a post-copy step fails, the already-copied destination remains, while the source file is counted as a failure and therefore contributes to the aggregate exit-status-1 rule.",
+      "evidence": [
+        {
+          "resource": "repo://sortinfolder.py#L215-L220",
+          "version": "repo-lines-v1:sha256:0598379ad7b497fec3b75c1a06dc72a9077b3ebb06f4587d4ca6c73f36263824:eyJzZWxlY3RlZExpbmVDb3VudCI6NiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNDRlNzNlMDI0NGMyMWQ2YzM4NDFhMDI2ZjkwOTcyMmY5Mzk5NTE2NGU2NTBkOWZkZDFjOTZkNzFmZTZmYjdkYyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYzI3MDk2ZWU0ZTZlNjI3YzQwZDNjZGI5ZWIzOWVmNjBkMjg2Yzg2MDhiNTFiNzA3OTdiYWI3MGNjM2Q0NDhkMCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiODE2YmVlMjI2MmU3MjkwYzZiODc0M2QwYjRmYTE1MTc3MWU3ZTVjM2Y1MTBlMjIzNTgyMmNjMTg3MDlmNzViMSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYTQ2NTE2YzJiODM3NjdhOWRiYjQ1M2Y5N2QxMmE3MzZkZmYyN2EzMTQyMTUyMWM3Njg2ZDNhZWNkMjU2NGZkMyJ9"
+        },
+        {
+          "resource": "repo://sortinfolder.py#L256-L274",
+          "version": "repo-lines-v1:sha256:00d86dcd81fa666bc009a085bfe025e287bb05370c6513a1051bbb096624cb4e:eyJzZWxlY3RlZExpbmVDb3VudCI6MTksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImY1NjhiZGM4ZjlkOTI5ZWUwN2M3NTUyMjI5MjI0NDIxMjIxZjhlNjA5ZjM1OGEwZjU1YmRhMTNmYWViN2ZiMGEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjkwOWQ2OTcxNWQyNDA0NjQ2NGQwNDQxYTE3YmMyMjhiMzU1ZjExZWRhOWE1NjU3YTczYjM4YzU1NWM0NGM5ZjIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjBhZjM2Mzk2MTFlMGI1MGE0Zjk4OGI1NzE2N2VjYWYzOTc3NjU2ZTc3ZDMxY2M1NjFiYmE2ZmQxMzc3MmM4ZTkifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_9fcf1da76825492da16cd7593559cb3b",
+      "statement": "shutil.copy2 preserves file metadata at the moment of copying, but the subsequent rotation and tagging edits act on the destination and can change file metadata, so the final output file is not guaranteed to retain every original timestamp.",
+      "evidence": [
+        {
+          "resource": "repo://sortinfolder.py#L124-L154",
+          "version": "repo-lines-v1:sha256:ea736c71114bb4b1e01fd9bfea7e7f1b9f67fe0a6088eac233430b0b64604ccc:eyJzZWxlY3RlZExpbmVDb3VudCI6MzEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjdjNWQ5OTE0NmNlMzYzMWI0YmY5NmZjNDZiNWNmYWNlYjBiYWQ4OGZiMDI4YThhYTg5MjQwOThmN2VmZDljZjUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjEzYjIyMzQzZTljNzU1OTIzM2RjNDZkY2VhNTg5OTY1OGY2Yzg2YTczMTRmYTQ2MjA5OGYyOTI4YWY2YWQzZjUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImEwZWVjOTExNjQyODc2MGNlNDViNDUyOWVkZmRhMzJhOTMzODhlNWMxODZjODE5MWUwM2UyMzdkOGE1YzVkMTEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjcyNjQ3YWE2N2I3ZDZkN2I3ODg4MGQ3OTkzMjBkYmJkNmVhZTZmYmMzZWMwZTg1ZjFlNjRmOTEzM2QwNTEwMWUifQ"
+        },
+        {
+          "resource": "repo://sortinfolder.py#L215-L220",
+          "version": "repo-lines-v1:sha256:0598379ad7b497fec3b75c1a06dc72a9077b3ebb06f4587d4ca6c73f36263824:eyJzZWxlY3RlZExpbmVDb3VudCI6NiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNDRlNzNlMDI0NGMyMWQ2YzM4NDFhMDI2ZjkwOTcyMmY5Mzk5NTE2NGU2NTBkOWZkZDFjOTZkNzFmZTZmYjdkYyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYzI3MDk2ZWU0ZTZlNjI3YzQwZDNjZGI5ZWIzOWVmNjBkMjg2Yzg2MDhiNTFiNzA3OTdiYWI3MGNjM2Q0NDhkMCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiODE2YmVlMjI2MmU3MjkwYzZiODc0M2QwYjRmYTE1MTc3MWU3ZTVjM2Y1MTBlMjIzNTgyMmNjMTg3MDlmNzViMSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYTQ2NTE2YzJiODM3NjdhOWRiYjQ1M2Y5N2QxMmE3MzZkZmYyN2EzMTQyMTUyMWM3Njg2ZDNhZWNkMjU2NGZkMyJ9"
+        },
+        {
+          "resource": "repo://sortinfolder.py#L55-L88",
+          "version": "repo-lines-v1:sha256:facf3d44e5813045fd3fe49a9e50ceae8446aea4eb3497575caabd671deacacb:eyJzZWxlY3RlZExpbmVDb3VudCI6MzQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImNlN2QwOTA0MDc3MzBlODM4M2ZhZmUzZGI0NTc4Mzg2M2E4ODQxOThiYTM4ZjkxMzJhYjg0OTA3ZDEwNTc4NmIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijc5OWZkMTgzMGNjOWEwMjJmNDcwZDcwZDY0NmUxYzA0ZDE4NzkyYWFhMjg0YjhhODcxMDZmNjlkMWRmYzQ1NmUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImNjNTM3ZjVmYTY5ODJhYTRmNzFlNTkyNjU2MTc0YmJlYjBmY2MzNTZiMDc5YjVlYzVmYzYwZTkzYmMzMzRiNTMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjZjNzFjOTNhNGVkZDBhODU2NzQ3ZDdjYmRiNDA4N2QyN2E2MjU5Mjk3ZTA0M2VjNGM3NzRkMWI4NGZhYzlhYjUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_c07d764148434771b3f13bb10215f258",
+      "statement": "The output tree is additive with no overwrite and no content-based deduplication: an existing destination name is replaced by name_1.ext, name_2.ext, and so on, so re-running against an existing output creates numeric-suffixed copies rather than replacing earlier results.",
+      "evidence": [
+        {
+          "resource": "repo://sortinfolder.py#L177-L187",
+          "version": "repo-lines-v1:sha256:96be50cbc7446e7fd6a81c19bc97ad5a851f4a74e7875b51bdf63a19076b4936:eyJzZWxlY3RlZExpbmVDb3VudCI6MTEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjYxYTk3M2MxY2FjZWZhODI2MzIyOWE1YmEwMmM1YTAyM2U0YWMzZWNhNjA0YTBjMjMzZGQ0N2RiMTI2OTE0ZmQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxN2NhMDA3OGNmZGM4MmU4N2Q4NzA2ZDkwYWZhNjI3NTI1MDVmNWQ5ZTcwZGNlMzExZjM1M2Q1N2IyODM4OTUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImU1NjcxZGYxNjhiZTUwMWZkNDY0MWM4ODMwMjNkMDdkNmU1YzhjM2U1NGJmNDAwZTU0ODVmY2NiODc2Yzc1YmEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImQwYmM5OGMxNmU5NzFjNTg5YzdmMDQyMzU3NjA5NTViMzBkOGM0MjE2ZWE4NTg1YWZiN2U1YWI1NzU5YmJmYWMifQ"
+        },
+        {
+          "resource": "repo://test_sortinfolder.py#L24-L96",
+          "version": "repo-lines-v1:sha256:144d93eb11991b2db167fc521258b2b5ed024a34c081c26a79a3d324be64ebea:eyJzZWxlY3RlZExpbmVDb3VudCI6NzMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijc4Zjc5YzFmOWZjY2NkZGJmMjFhZTQwMTdiOGIwODBiN2RmMTIzYWVlMTljNzhhNDA1YjUyMDI1MzY2NGQ3YjQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjkyZjY1YTIyOGMyZjkzZDA1NjY4N2ZiZjllMDEwMjJjMGE4ZTRmMjk1MzZhYjFmZDQxN2JjODkyNTA4N2JkZjUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjBmMTZmY2Q4MWYwYTAwMzdkMjY1YWI2NjZkYzMzMjVhZWExMTQzNjA1ODZhZjAyMDVlNjgwYjM3ZjdmNDJjYWUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImFhMDU3ZTlmZjFlOWZhZGI0ZDc1N2FkNjQ3Mjk1ZjU4N2NlOWVjMWMwZDhkYWJlYjE2ZDk0NDY0ZjFhY2M4NTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_19ee85902c0d4177afb17d7371c629a1",
+      "statement": "An output path nested inside the source path is not detected or rejected, so a later scan can discover previously generated output files under the source tree and process them again; the source and output trees should be kept distinct and non-overlapping.",
+      "evidence": [
+        {
+          "resource": "repo://sortinfolder.py#L223-L253",
+          "version": "repo-lines-v1:sha256:671b13341fff9aa61cef925d6e2988018e33b12b8dff1c36873e8dcf1d30f3b9:eyJzZWxlY3RlZExpbmVDb3VudCI6MzEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjcwZTkwZDQ5ZjI2ZDJhNTg4NjQzNjE5ZGZlYWFjNGI0NmM5YjAxZjg4NzI2YmIxYmQ1MWJmNzVkZDIxMzg0ZjMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImM0Y2Q2MWFkZjZhOTQwZGU2ODQ1ZTg5Y2M2YWM3YzBlNDFhMDFjY2M4ZWEzN2NhZjMyZWQ3MDg2MWYxY2E4MzIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjlmM2Q3NmNmYjZlYTUyZWM0ZGM3MDVjOTJiOTUzMDFjZDA4YjNlMTg1OTRiMWJlYzI2MWJiYjE2NmMzMDgyYTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjNiOWZmYzAxM2Y1MWRlNzMyMjE1N2IwNTdlYzZlYjFjYmZiNzQ4MjE4OWViMmEwYzVlY2IwYjlhODMwYzAyNzQifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_a8caf26e61644c058a60cebdcc3830a8",
+      "statement": "In dry-run mode a source image that cannot be opened for the orientation check is logged as a warning and the worker continues, so the degraded check does not count as a file failure and the run can still exit 0 even though the real copy-and-rotate path would reject that image.",
+      "evidence": [
+        {
+          "resource": "repo://sortinfolder.py#L189-L212",
+          "version": "repo-lines-v1:sha256:9fef68c06dd34babdbbcb6d94e5c951ee41e1bc3ab00eb50ea0564cbc9213a12:eyJzZWxlY3RlZExpbmVDb3VudCI6MjQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjdiNjFkOGI1ODE5YTBlNWQ3ZjI5NDMwNzkwNzdlNTdlN2ViMjFkYTFkOGU1MDdkNjE0YjBkZWY3NTM2YjEzNDUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjlmZjg3OWQwNjI0Yjc4MWQxYzIyMTUwMDkyNTJlZGVlNjJkMjY5M2NjMDEwY2ZhMTliMTEyYjYxYjMxMDM5ZGUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImI0MmNiZDk3YjIwMDA2YTQzNTcwOTIzOWNhODNhMWQ4ODJhMjg0NWI5OTg4ZjFhOGRiNDlhNGE1ZjMxYzAxMGMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjJmMzJlYmQ3Mzk3OTRkNDVmMTQ0MTc1NDhlNzc2MmYxZGRjZWU4MTNlMTFlN2Y5MWY0M2UzOTU3MGQ0ZThmY2UifQ"
+        },
+        {
+          "resource": "repo://sortinfolder.py#L256-L274",
+          "version": "repo-lines-v1:sha256:00d86dcd81fa666bc009a085bfe025e287bb05370c6513a1051bbb096624cb4e:eyJzZWxlY3RlZExpbmVDb3VudCI6MTksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImY1NjhiZGM4ZjlkOTI5ZWUwN2M3NTUyMjI5MjI0NDIxMjIxZjhlNjA5ZjM1OGEwZjU1YmRhMTNmYWViN2ZiMGEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjkwOWQ2OTcxNWQyNDA0NjQ2NGQwNDQxYTE3YmMyMjhiMzU1ZjExZWRhOWE1NjU3YTczYjM4YzU1NWM0NGM5ZjIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjBhZjM2Mzk2MTFlMGI1MGE0Zjk4OGI1NzE2N2VjYWYzOTc3NjU2ZTc3ZDMxY2M1NjFiYmE2ZmQxMzc3MmM4ZTkifQ"
+        }
+      ]
     }
   ],
   "verification": {
-    "by": "openwiki/0.7.3",
-    "at": "2026-11-03T04:36:59.554Z"
+    "by": "openwiki/0.9.0",
+    "at": "2026-11-11T09:15:33.931Z"
   }
 }

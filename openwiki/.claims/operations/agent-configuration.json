@@ -1,0 +1,74 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:65b389a3e112262520e3e023825078fc3d23018f57b6eba0e3672e2b407aab63",
+  "claims": [
+    {
+      "id": "claim_67abc3586a1843d89d0fb6e7f3c148d1",
+      "statement": "AGENTS.md makes the generated OpenWiki tree optional just-in-time context: agents must not enumerate, preload, or search it at task start, and should retrieve it only when requested, materially needed, or needed to resolve an important uncertainty; when the retrieval tools are available it directs use of openwiki_search and openwiki_read, with workspace discovery handled only when necessary, and the documented fallback is the quickstart page.",
+      "evidence": [
+        {
+          "resource": "repo://AGENTS.md#L3-L11",
+          "version": "repo-lines-v1:sha256:19023197f8de712ff65a6cea90e0ddab0fb87b6667eddae0878bd1469ae6565c:eyJzZWxlY3RlZExpbmVDb3VudCI6OSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYjQ4MzZlZDdlMDA1Mzc3NWEwYTk2NmNlODYxMzRiMjM0N2Q4NTFhN2IwMmY0ODEyYmViMmM1OWQxYzY4ZDUyNiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMmNiM2Q0YTQ2NjliZGM3YTQwZDk4MDc3MzVkZjYwOGJmZTMxZDM4NjA2N2M5OTliNzUwYWFjNjMyYzFiNmQzMSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjIsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNGI4NTllNTVlNGIyZDI2MmI1NDY0YmU5N2RlYzIxM2FhZWIxZTVjY2QwMGQ0MTAyMGRkYWQ0MTNlZGI3NzZlYyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMjA3OTQ1NGEwZWE3NWRmOTMzMjU1MzRjYzVlNmNlYTlhYjc5MThmMjJmYmY5MmFkMDcxNTBlYmZmYjM4NzZiYiJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_5c9bee9c4c7b4f1ea3aed0169c2f5e82",
+      "statement": "AGENTS.md establishes source code and tests as authoritative, asks for the narrowest quiet validation that proves changed behavior while preserving complete failure output, and directs agents to use the documented maintenance process rather than hand-edit generated OpenWiki pages.",
+      "evidence": [
+        {
+          "resource": "repo://AGENTS.md#L12-L15",
+          "version": "repo-lines-v1:sha256:abc0e7ed9307eb1bad177ef1528793af92e5da6f59520d3a105f194d49d97696:eyJzZWxlY3RlZExpbmVDb3VudCI6NCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYmNiMzA1ZGNiMTRkY2I0MTUzZTFhM2YyNTk0NjVjZWFkYWRjOWIwNDRhNzkzZGE0MjdkMmM0M2QzYTA5ZDQ5MSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMDFiYTQ3MTljODBiNmZlOTExYjA5MWE3YzA1MTI0YjY0ZWVlY2U5NjRlMDljMDU4ZWY4Zjk4MDVkYWNhNTQ2YiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNDhhMTMzOGFlN2QxMWM5NDRlODVjNTU0N2JiNmVmNDRlZTljMmNkZjA4ZDZjOWIwOTI3ZDgzMGIxNzFjYzBlNyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjEsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMDlmNzg3MTQ4OTNhYTc3OTQyY2VhMWM0YTJlMDIzMWRiYjdmYTJhNDFhNzBjODE0NjBhM2M2NzU2MmRhM2FhYSJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_8672e1a09c75444ab3c89eda7923f67d",
+      "statement": "The repository's Codex project configuration routes the coding-router model through the litellm provider at http://litellm-proxy.agents.svc:4000/v1, obtains its key from OPENAI_API_KEY, and uses the responses wire API.",
+      "evidence": [
+        {
+          "resource": "repo://.codex/config.toml#L4-L11",
+          "version": "repo-lines-v1:sha256:1e77cff31dcd1d80525c111f9cafa6fb6463ebde020a0bab17acaaec5074436b:eyJzZWxlY3RlZExpbmVDb3VudCI6OCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiODNkOWRjMzJlMzIwODlkZTRmZTc2MTQ0NTlkZjczZjAwMWYwYjhkYmYzNjc3MGU2ZjdiMGMzOGJhY2YyZjViMyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiM2I5YjQ1MTA4NjI2MGY3NGNhMzlmZTczZjFhMGFmMDRkMmUxZWIzOGYwYTdhYTk2NWFlMzU4NGY2ZWJkYTBkOSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNmYyMGZmMGQ1NjAwN2JmYTEyOTQ2Y2VhYTFiZThiZTQ2OGU4OTgyYjUyZDM0ZTU3YjNmZjVhMGM2MTExOWYwZiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjAsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZTNiMGM0NDI5OGZjMWMxNDlhZmJmNGM4OTk2ZmI5MjQyN2FlNDFlNDY0OWI5MzRjYTQ5NTk5MWI3ODUyYjg1NSJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_30ba6a561ada4dd583f886a8bafa15c8",
+      "statement": "OpenCode's repository configuration uses @ai-sdk/openai-compatible with the litellm provider, takes its endpoint, API key, and model identifier from OPENCODE_BASE_URL, OPENAI_API_KEY, and OPENCODE_MODEL environment substitutions, and allows both external-directory and bash operations.",
+      "evidence": [
+        {
+          "resource": "repo://opencode.json#L1-L13",
+          "version": "repo-lines-v1:sha256:d9e4c9f01012c27b56c5e2001d5007c39a9cd39e6c663b2df9dee53ad4e85c59:eyJzZWxlY3RlZExpbmVDb3VudCI6MTMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImE2ZmIwOGZkYTFhY2I5NTdiNjExNmJkMzc4MTFhMWZlNDFhMDE2MTFjMDYzMWVkYmY3ODZkNjg4OWEyN2E1NWMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQxMGIzNmFhNzRhNTliY2Y0YTg4MTg1ODM3ZjY1OGFmYWYzNjQ2ZWZmMmJiMTZjMzkyOGQwZTkzMzVlOTQ1ZDIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_50d8b217126f48119e21ebc6ee9d9491",
+      "statement": "The .optio/setup.sh helper creates the home-directory Codex directory and overwrites ${HOME}/.codex/config.toml with a LiteLLM coding-router provider configuration, so its effect is outside the repository and separate from the tracked .codex/config.toml.",
+      "evidence": [
+        {
+          "resource": "repo://.optio/setup.sh#L1-L16",
+          "version": "repo-lines-v1:sha256:e383a4a15f81584fbfa2333ac595726808a1b8a9645a6a96580580fc5009951f:eyJzZWxlY3RlZExpbmVDb3VudCI6MTYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjFkOTVmYzA0YTgwYzk1MmY0OWNlNDE4ODYyN2M1M2IwZmJlOGM0NDA0MWI5NTJkNTkyYWNkMWRlOTk4NjE0NjYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImZiOTJmYjQyZGJjYzBkMmEzZGViOGE0ZWE2NTdmZGQ2ZTkxMjZkMmM5ZDM1OWFmNTJlYTcyZTNlM2UyYWNmNDMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_0e7faf17d24e47c586033bfb6b9d1b68",
+      "statement": "These repository files configure the coding agent and its model provider rather than the sorter: sortinfolder.py reads no configuration file or environment variable, and its runtime configuration is limited to argparse flags.",
+      "evidence": [
+        {
+          "resource": "repo://sortinfolder.py#L1-L17",
+          "version": "repo-lines-v1:sha256:4c28fb3128ab6142abdc8b295cf2a81ddc37d7b91aca1ed9a6b91acc308b3833:eyJzZWxlY3RlZExpbmVDb3VudCI6MTcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImI1M2U1YTUyODYxNzJmYjBhNDc3Mjg0M2JhM2VkNjIzMzE2ODdiY2I5OTM5ZWM5YzQ5ZTkwNjZkNGVlNDI3MmQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjRiZWNiMzI1NDIwOTRhNTM0NGM5YWJjMzVjNjhkNGNlN2ZkYWIwOWFjOTg5MTYxY2QzODFmYTNjY2VkMGEzNjIifQ"
+        },
+        {
+          "resource": "repo://sortinfolder.py#L281-L317",
+          "version": "repo-lines-v1:sha256:419e7536cd40bae3de4be8f145fac26de284bb11469ce905f5245b26443b1873:eyJzZWxlY3RlZExpbmVDb3VudCI6MzcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjhkODBlMjQ5NGI5OGFlY2UyNjlkYjE5M2NlYjRjYTdjNzhkZTA3NTM5ZjM3MWZiNTY5MzMxY2MwMTk1MWQ3ODQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjE4ZTk5MjMyY2QzYTMwOWY1MGNiZDZmNjYyMTI3ZWVhYWZjZTFmNzM2MjkyZGVmYjExM2Q5ODFhMjBjN2Q4NTIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImFmMjYwOTc5ZmVlZjkzZDJhYmNjMmQ4MWE0N2VkN2M0NDhhOTUyMDIxZTIwODlhM2U4YWZkZTA2MzVjYjM2YzUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.9.0",
+    "at": "2026-11-11T09:15:33.931Z"
+  }
+}

@@ -1,11 +1,11 @@
 ---
 type: testing-reference
 title: Test Suite
-description: The pytest suite in test_sortinfolder.py — the seven tests and their invariants, the TemporaryDirectory + piexif EXIF fixture pattern, subprocess vs. direct-import invocation styles, the dockerized CI import check, and the README-vs-tests format-support mismatch.
-tags: [testing, pytest, python, ci, fixtures, exif, cli]
+description: Reference for the pytest suite in test_sortinfolder.py — the seven tests and their invariants, the TemporaryDirectory and piexif EXIF fixture pattern, subprocess versus direct-import invocation styles, the standalone runner's six-of-seven coverage, and the CI import gate that does not run pytest.
+tags: [testing, pytest, python, ci, fixtures, exif, cli, coverage]
 verified:
-  - by: openwiki/0.7.3
-    at: 2026-11-03T04:36:59.554Z
+  - by: openwiki/0.9.0
+    at: 2026-11-11T09:15:33.931Z
 sources:
   - id: openwiki-source-11ab5406a11e454dd2e00511
     resource: repo://.ci/ci.yaml
@@ -15,14 +15,14 @@ sources:
     resource: repo://sortinfolder.py
   - id: openwiki-source-48eb19a4c1e45a7d3b04236a
     resource: repo://test_sortinfolder.py
-generated: { by: "openwiki/0.7.3", at: "2026-11-03T04:36:59.554Z" }
+generated: { by: "openwiki/0.9.0", at: "2026-11-11T09:15:33.931Z" }
 ---
 
 # Test Suite
 
-`test_sortinfolder.py` is the entire automated test surface of this repository. It is a single pytest file with seven tests that cover the program from two levels: CLI-level tests that run `sortinfolder.py` as a subprocess and assert on exit codes, log output, and `--help` text, and unit-level tests that import functions from the module directly and assert on filesystem side effects. Both styles share one fixture pattern: disposable directories created with `tempfile.TemporaryDirectory`, and EXIF-stamped images generated on the fly with Pillow and `piexif`.
+`test_sortinfolder.py` is the entire automated test surface of this repository. It is a single pytest file with seven tests that cover the program from two levels: CLI-level tests that run `sortinfolder.py` as a subprocess and assert on exit codes, log output, and `--help` text, and unit-level tests that import functions from the module directly and assert on return values, filesystem side effects, and captured logs. Both styles share one fixture pattern: disposable directories created with `tempfile.TemporaryDirectory`, and EXIF-stamped images generated on the fly with Pillow and `piexif`.
 
-For how the tested functions behave at runtime, see [Architecture Overview](../architecture/overview.md) and [Sorting Pipeline](../workflows/sorting-pipeline.md); the CLI surface the tests exercise is documented in [CLI and Configuration](../operations/cli-and-configuration.md).
+For how the tested functions behave at runtime, see [Architecture Overview](../architecture/overview.md) and [Sorting Pipeline](../workflows/sorting-pipeline.md); the CLI surface the tests exercise is documented in [CLI and Configuration](../operations/cli-and-configuration.md). For the repository's rules on choosing a narrow validation and preserving complete failure output when reporting results, see [Repository Guidance and Coding-Agent Configuration](../operations/agent-configuration.md).
 
 ```mermaid
 flowchart TD
@@ -36,9 +36,15 @@ flowchart TD
     UNIT --> DUP["test_process_image_handles_duplicate_filenames"]
     UNIT --> FMT["test_process_image_supports_multiple_formats"]
     UNIT --> ERR["test_error_summary_and_exit_code"]
+    RUN["Standalone __main__ runner - six of seven tests"] --> HELP
+    RUN --> DRY
+    RUN --> INV
+    RUN --> DUP
+    RUN --> FMT
+    RUN --> ERR
 ```
 
-*Caption: the seven tests split into CLI-level subprocess tests and unit-level direct-import tests, both fed by the shared TemporaryDirectory + piexif fixture pattern.*
+*Caption: the seven tests split into CLI-level subprocess tests and unit-level direct-import tests, both fed by the shared TemporaryDirectory + piexif fixture pattern, while the standalone runner covers six of the seven.*
 
 ## How to run the suite
 
@@ -48,19 +54,19 @@ flowchart TD
 pytest test_sortinfolder.py
 ```
 
-**Standalone:** the file also runs without pytest. Its `__main__` block calls each test function in sequence and prints a `passed` line after each one, so `python test_sortinfolder.py` works as a smoke runner in environments where pytest is not installed.
+**Standalone:** the file also runs without pytest. Its `__main__` block calls **six of the seven** test functions in sequence and prints a `passed` line after each one, so `python test_sortinfolder.py` works as a smoke runner in environments where pytest is not installed. The omitted test is `test_cli_exit_code_end_to_end` — the end-to-end exit-code contract is therefore exercised only by a real pytest run, not by the standalone runner.
 
-**In CI:** see [How CI runs them](#how-ci-runs-them) below.
+**In CI:** see [How CI runs them](#how-ci-runs-them) below. The CI job does not run pytest, so a local `pytest test_sortinfolder.py` is required to obtain the behavioral guarantees described on this page.
 
 ## The shared fixture pattern
 
-There is no pytest fixture function or conftest; instead, every test builds its world inline with the same three ingredients:
+There is no pytest fixture function, `conftest.py`, or pytest configuration file in the repository; instead, the tests that need a filesystem build their world inline with the same three ingredients:
 
-1. **Disposable directories.** Each test wraps its work in `with tempfile.TemporaryDirectory() as tmpdir:` and creates a `source` basepath and an `output` path inside it. Subdirectories (e.g. `sub1/` and `sub2/` for the duplicate-filename test) are created with `os.makedirs`. Everything is removed automatically when the block exits, so tests never pollute the working tree and can run in parallel or repeatedly.
+1. **Disposable directories.** The five image-processing tests wrap their work in `with tempfile.TemporaryDirectory() as tmpdir:` and create a `source` basepath and an `output` path inside it. Subdirectories (e.g. `sub1/` and `sub2/` for the duplicate-filename test) are created with `os.makedirs`. Everything is removed automatically when the block exits, so these tests never pollute the working tree and can run repeatedly. The two remaining tests need no disposable tree: `test_help_shows_usage_and_examples` touches no files at all, and `test_cli_invalid_threads_value` passes the literal paths `/tmp` and `/tmp/out` — harmless because the thread-count check in `sort_images` raises before any directory is created.
 
-2. **EXIF-stamped images generated in code.** Test images are created with `PIL.Image.new('RGB', (100, 100), color=...)` and saved with an EXIF dictionary that pins `piexif.ExifIFD.DateTimeOriginal` to `"2024:06:15 10:30:00"`. `piexif.dump(exif_dict)` serializes the dictionary, and the bytes are passed to `img.save(path, "JPEG", exif=exif_bytes)`. This gives every test a deterministic, known EXIF date — the tests never depend on real camera data or the machine's clock, and the expected destination folder is always `output/2024/06/15`.
+2. **EXIF-stamped images generated in code.** Test images are created with `PIL.Image.new('RGB', (100, 100), color=...)` and saved with an EXIF dictionary that pins `piexif.ExifIFD.DateTimeOriginal` to `"2024:06:15 10:30:00"`. `piexif.dump(exif_dict)` serializes the dictionary, and the bytes are passed to `img.save(path, "JPEG", exif=exif_bytes)` (or `"TIFF"`). This gives the tests a deterministic, known EXIF date — they never depend on real camera data, and the expected destination folder is always `output/2024/06/15`.
 
-3. **Content assertions at the pixel level.** Because Pillow's named colors can be quantized during JPEG encoding (the test comments note that PIL 'red' may encode as 254, not 255), the tests do not compare checksums of encoded output. Instead they re-open the copied images and assert on pixel values with tolerant thresholds, e.g. `r1 > 200 and g1 < 50 and b1 < 50` for the red image and the mirrored bound for the blue one. One test additionally compares MD5 checksums of two output files only to prove they *differ*, which is safe because it asserts inequality, not exact bytes. Together these assertions verify that `process_image` preserves image content through copy, rotation, and tagging.
+3. **Content assertions at the pixel level.** Because Pillow's named colors can be quantized during JPEG encoding (the test comments note that PIL 'red' may encode as 254, not 255), the tests do not compare checksums of encoded output. Instead they re-open the copied images and assert on pixel values with tolerant thresholds, e.g. `r1 > 200 and g1 < 50 and b1 < 50` for the red image and the mirrored bound for the blue one. One test additionally compares MD5 checksums of two output files only to prove they *differ*, which is safe because it asserts inequality, not exact bytes. These assertions verify that `process_image` preserves image content through the copy and tagging steps; no fixture sets an EXIF `Orientation` tag, so the rotation paths are not exercised by the suite.
 
 PNG files are created without EXIF (Pillow does not write EXIF for PNG via this API), which is deliberate: that test specifically exercises the [EXIF fallback to file creation time](../concepts/exif-and-metadata.md) while asserting the file is still copied.
 
@@ -70,7 +76,7 @@ PNG files are created without EXIF (Pillow does not write EXIF for PNG via this 
 | --- | --- | --- |
 | `test_help_shows_usage_and_examples` | CLI (subprocess) | `--help` exits successfully and prints argparse output containing `usage: sortimages`, `options:`, and an `Examples:` section. |
 | `test_process_image_handles_duplicate_filenames` | Unit (import) | Two source files named `test.jpg` in different subfolders with identical EXIF dates land in the same `2024/06/15` folder as `test.jpg` and `test_1.jpg`, with differing checksums and their original red/blue pixel content preserved. |
-| `test_process_image_supports_multiple_formats` | Unit (import) | JPG, PNG, and TIFF files are all processed: EXIF-dated JPG and TIFF land in `2024/06/15`, EXIF-less PNG is still copied (falling back to ctime), the JPG gains a `RelativePath:` entry in its EXIF `UserComment`, and the TIFF is copied without being tagged. |
+| `test_process_image_supports_multiple_formats` | Unit (import) | JPG, PNG, and TIFF files are all processed: EXIF-dated JPG and TIFF land in `2024/06/15`, EXIF-less PNG is still copied (falling back to ctime), the JPG gains a `RelativePath:` entry in its EXIF `UserComment`, and the TIFF is copied to the same dated folder. |
 | `test_cli_threads_and_dry_run` | CLI (subprocess) | `--threads 5 --dry-run` exits 0, prints `DRY RUN` messages including the target date folder and filename, and copies nothing — the output directory stays empty. |
 | `test_cli_invalid_threads_value` | CLI (subprocess) | `--threads 0` and `--threads 101` both produce a non-zero exit code and output mentioning threads. |
 | `test_error_summary_and_exit_code` | Unit (import) | `sort_images` returns the `(success_count, failure_count, errors_list)` tuple; a corrupted file yields a structured error dict (`file`, `type`, `message`), the summary line reports `Processed: 2, Succeeded: 1, Failed: 1`, and the valid image is still processed despite the failure. |
@@ -78,7 +84,7 @@ PNG files are created without EXIF (Pillow does not write EXIF for PNG via this 
 
 ### test_help_shows_usage_and_examples
 
-Runs `[sys.executable, "sortinfolder.py", "--help"]` with `check=True` and asserts the argparse help text contains `usage: sortimages`, `options:`, and `Examples:`. This proves the parser is built with `prog="sortimages"` and a raw-description epilog containing the three usage examples — the help text is treated as part of the tool's contract, so renaming the program or dropping the examples would fail CI.
+Runs `[sys.executable, "sortinfolder.py", "--help"]` with `check=True` and asserts the argparse help text contains `usage: sortimages`, `options:`, and `Examples:`. This pins the parser's `prog="sortimages"` and its raw-description epilog containing the three usage examples — the help text is treated as part of the tool's contract, so renaming the program or dropping the examples would fail the pytest suite (though not the CI import gate).
 
 ### test_process_image_handles_duplicate_filenames
 
@@ -91,13 +97,13 @@ Creates one JPG (EXIF-stamped), one PNG (deliberately without EXIF), and one TIF
 - The JPG and TIFF are copied into `output/2024/06/15/` (their EXIF `DateTimeOriginal` drives the date folder).
 - The PNG is still copied somewhere under the output tree (found by walking it), proving that a missing EXIF date falls back to the file creation time without dropping the file.
 - Re-reading the output JPG with `piexif.load` finds `RelativePath:` inside the EXIF `UserComment`, proving the tagging step ran.
-- The TIFF exists in the output but is asserted *not* to be tagged — the test simply confirms it was copied, reflecting that tagging is restricted to `.jpg`/`.jpeg`.
+- The TIFF exists in the output. Although the test's comment says it "does NOT have RelativePath tag", the only assertion is that the file exists — the absence of a tag is not asserted directly. The JPEG-only tagging restriction comes from `add_relative_path_tag`, which only writes EXIF for `.jpg`/`.jpeg` files.
 
 This test is the strongest evidence that the tool is **not** JPEG-only; see [README vs. tests: the format-support mismatch](#readme-vs-tests-the-format-support-mismatch).
 
 ### test_cli_threads_and_dry_run
 
-Runs the script as a subprocess with `--threads 5 --dry-run` against a single EXIF-stamped JPEG and asserts four things: exit code 0; the combined stdout+stderr contains `DRY RUN` (logs go to stderr, so the test concatenates both streams); the output directory is empty if it exists at all (dry run must not create date folders or copy files); and the dry-run log names the target date folder `2024/06/15` and the filename `test.jpg`, showing the user exactly what a real run would do. This is the only test covering `--dry-run` behavior end-to-end, including that dry-run mode performs no filesystem writes.
+Runs the script as a subprocess with `--threads 5 --dry-run` against a single EXIF-stamped JPEG and asserts four things: exit code 0; the combined stdout+stderr contains `DRY RUN` (logs go to stderr, so the test concatenates both streams); the output directory contains no files, if it exists at all (dry run must not create date folders or copy files); and the dry-run log names the target date folder `2024/06/15` and the filename `test.jpg`, showing the user exactly what a real run would do. This is the only test covering `--dry-run` behavior end-to-end. Its guarantee is "no files copied", not "no filesystem writes": `sort_images` may still create the top-level `output_path` before planning, and the test only asserts that the tree contains zero files.
 
 ### test_cli_invalid_threads_value
 

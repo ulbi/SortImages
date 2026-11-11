@@ -1,3 +1,3 @@
 # Files
 
-- [Test Suite](test-suite.md) - The pytest suite in test_sortinfolder.py — the seven tests and their invariants, the TemporaryDirectory + piexif EXIF fixture pattern, subprocess vs. direct-import invocation styles, the dockerized CI import check, and the README-vs-tests format-support mismatch.
+- [Test Suite](test-suite.md) - Reference for the pytest suite in test_sortinfolder.py — the seven tests and their invariants, the TemporaryDirectory and piexif EXIF fixture pattern, subprocess versus direct-import invocation styles, the standalone runner's six-of-seven coverage, and the CI import gate that does not run pytest.

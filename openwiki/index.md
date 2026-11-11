@@ -4,7 +4,7 @@ okf_version: "0.2"
 
 # Files
 
-- [Quickstart](quickstart.md) - Entry point for the OpenWiki of this repository — a single-file EXIF-based photo sorter. Covers what the tool does, how to install its dependencies, how to run the CLI, and where to go next in the wiki.
+- [Quickstart](quickstart.md) - Repository entry point for the OpenWiki of this repository — install the three manual runtime dependencies, preview a run safely with --dry-run, understand the dated output layout, and route readers to architecture, pipeline, metadata, CLI/operations, agent-guidance, and test pages.
 
 # Directories
 

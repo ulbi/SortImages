@@ -1,11 +1,11 @@
 ---
 type: operations-reference
 title: CLI, Configuration, and Operations
-description: Operational reference for running sortinfolder.py — the argparse interface and its validation rules, thread-count bounds, logging setup and levels, dry-run mode, exit-code behavior, the CI container, and the copy-only (additive) safety model.
+description: Operational reference for running sortinfolder.py — its argparse interface, split validation rules, logging levels and format, dry-run behavior, exit-status semantics, CI container, and additive copy-only safety model.
 tags: [operations, cli, argparse, logging, exit-codes, ci, configuration]
 verified:
-  - by: openwiki/0.7.3
-    at: 2026-11-03T04:36:59.554Z
+  - by: openwiki/0.9.0
+    at: 2026-11-11T09:15:33.931Z
 sources:
   - id: openwiki-source-11ab5406a11e454dd2e00511
     resource: repo://.ci/ci.yaml
@@ -17,12 +17,12 @@ sources:
     resource: repo://sortinfolder.py
   - id: openwiki-source-48eb19a4c1e45a7d3b04236a
     resource: repo://test_sortinfolder.py
-generated: { by: "openwiki/0.7.3", at: "2026-11-03T04:36:59.554Z" }
+generated: { by: "openwiki/0.9.0", at: "2026-11-11T09:15:33.931Z" }
 ---
 
 # CLI, Configuration, and Operations
 
-`sortinfolder.py` is operated entirely from the command line: there are no configuration files, no environment variables, and no persistent state of its own. Every knob is a CLI flag parsed by `main()`, and the only runtime configuration is which directory to read, which directory to write, how loudly to log, how many worker threads to use, and whether to simulate instead of copying. This page is the operational reference for that surface.
+`sortinfolder.py` is operated entirely from the command line. It has no configuration file, environment-variable input, daemon, or persistent state: every run is controlled by the arguments passed to `main()`. The runtime choices are the source and output directories, logging level, worker-thread count, and whether to simulate instead of copy.
 
 ## The command line
 
@@ -30,7 +30,7 @@ generated: { by: "openwiki/0.7.3", at: "2026-11-03T04:36:59.554Z" }
 python sortinfolder.py [basepath] [output_path] [--log LEVEL] [--threads N] [--dry-run]
 ```
 
-The parser is built with `prog="sortimages"` and includes an epilog with three examples:
+The parser uses `prog="sortimages"`, even though the file is invoked as `sortinfolder.py`, and its help text includes three examples:
 
 ```
 sortimages /data/photos /data/sorted
@@ -40,105 +40,141 @@ sortimages /data/photos /data/sorted --threads 5 --dry-run
 
 | Argument | Type | Default | Meaning |
 | --- | --- | --- | --- |
-| `basepath` (positional) | str | — | The base path where the images are located. |
-| `output_path` (positional) | str | — | The output path where images will be copied to. |
-| `--log` | str | `INFO` | Logging level name (`DEBUG`, `INFO`, `WARNING`, `ERROR`, `CRITICAL`). |
-| `--threads` | int | `30` | Number of worker threads (validated to 1–100). |
-| `--dry-run` | flag | `False` | Simulate processing without copying files. |
+| `basepath` (positional) | str | — | Directory tree to scan for files. |
+| `output_path` (positional) | str | — | Root of the generated output tree. |
+| `--log` | str | `INFO` | Logging level name. |
+| `--threads` | int | `30` | Maximum worker-thread count; the accepted range is 1–100. |
+| `--dry-run` | flag | `False` | Plan the run without copying or modifying image files. |
 
-The two positional arguments are required; running without them prints argparse usage and exits with argparse's standard error code 2 before any processing begins.
+Both positional paths are required. A missing positional path, an unknown option, or a non-integer `--threads` value is rejected by `argparse` before the processing body runs. `test_help_shows_usage_and_examples` verifies that help contains `usage: sortimages`, `options:`, and the examples section.
 
-## Argument validation rules
+## Validation is split between two layers
 
-Validation is split between `main()` and `sort_images()`, and the two follow different failure styles:
+`main()` and `sort_images()` enforce different rules at different times.
 
-- **`--log` is validated in `main()` immediately after parsing.** The string is upper-cased and looked up via `getattr(logging, args.log.upper(), None)`. If the result is not an `int`, `main()` raises `TypeError(f"Invalid log level: {args.log}")` — before any logging is configured or any file is touched. Valid names are the standard `logging` module level attributes (`DEBUG`, `INFO`, `WARNING`, `ERROR`, `CRITICAL`, and their numeric aliases such as `logging.NOTSET`).
-- **`--threads` is *not* validated in `main()`.** It is passed through to `sort_images(basepath, output_path, threads=args.threads, dry_run=args.dry_run)`, which enforces the bound itself: `if not 1 <= threads <= 100: raise ValueError(...)`. Out-of-range values therefore fail inside the orchestration layer, not at parse time. `test_cli_invalid_threads_value` drives this end-to-end via subprocesses: `--threads 0` and `--threads 101` both produce a non-zero exit code and output mentioning threads.
+### Log level: validated in `main()`
 
-There is no upper validation on the two path arguments — a nonexistent `basepath` simply makes `os.walk` yield nothing (an empty run), while a nonexistent `output_path` is created automatically by `sort_images` (`os.makedirs(output_path)`) before any file is submitted.
+Immediately after parsing, `main()` converts the value to uppercase and resolves it with:
 
-## Exit codes
+```
+numeric_level = getattr(logging, args.log.upper(), None)
+```
 
-`main()` exits with a single well-defined convention:
+If the result is not an integer, `main()` raises `TypeError(f"Invalid log level: {args.log}")`. This happens before `setup_logging()` and before `sort_images()`, so no output root is created and no source file is scanned. The intended accepted names include `DEBUG`, `INFO`, `WARNING`, `WARN`, `ERROR`, `FATAL`, `CRITICAL`, and `NOTSET`. A module-prefixed spelling such as `logging.DEBUG` is not accepted because the lookup does not include the `logging.` prefix.
 
-- **Exit 0** on success. `main()` does not call `sys.exit(0)` explicitly; falling through the end of `main()` produces the interpreter's default exit code 0.
-- **Exit 1** only when `failure_count > 0`, i.e. when at least one submitted file raised an exception in its worker thread. This is the only condition that triggers `sys.exit(1)`.
+### Thread count: validated in `sort_images()`
 
-Note that per-file errors do not abort the run. `sort_images` catches every worker exception (`except Exception`), appends a structured record `{"file": ..., "type": ..., "message": ...}` to `errors_list`, logs it at error level, and continues; the summary line `Processed: N, Succeeded: N, Failed: N` is always logged, and the exit code reflects the aggregate, not the first error. Both paths are covered end-to-end by `test_cli_exit_code_end_to_end`, which runs the CLI as a subprocess and asserts exit code 1 for a run containing a corrupted file and exit code 0 for a run of valid files only. Exit-code semantics and the error-summary structure are also asserted in `test_error_summary_and_exit_code` (see [Test Suite](../testing/test-suite.md)).
+`main()` does not check the thread range. It passes the parsed integer to `sort_images(basepath, output_path, threads=args.threads, dry_run=args.dry_run)`, whose first operation is:
+
+```
+if not 1 <= threads <= 100:
+    raise ValueError(f"threads must be between 1 and 100, got {threads}")
+```
+
+Consequently, an out-of-range count fails inside the orchestration layer. `test_cli_invalid_threads_value` runs the CLI in subprocesses with `--threads 0` and `--threads 101` and verifies a non-zero status and an error mentioning threads. Because validation precedes directory creation, an invalid thread count does not create `output_path`.
+
+### Paths: no path-level validation
+
+There is no check that either path exists and no comparison between the source and output paths. A nonexistent `basepath` makes `os.walk(basepath)` yield no files, producing an empty run after the output root is created. A nonexistent `output_path` is created with `os.makedirs(output_path)` before any work is submitted.
+
+## Exit and termination behavior
+
+There are three distinct status paths; they should not be collapsed into a single “success versus failure” rule.
+
+| Situation | Observed process status | Boundary reached |
+| --- | --- | --- |
+| Argparse usage or option-type error | 2 | Argparse rejects the command line before the processing body. |
+| Invalid log name or invalid thread count | Non-zero, normally Python's exception status 1, with a traceback | An uncaught `TypeError` or `ValueError` terminates the run before orchestration. |
+| Normal run with no worker failures | 0 | `main()` returns normally. |
+| Normal run with one or more worker failures | 1 | `main()` calls `sys.exit(1)`. |
+
+After `sort_images()` returns, the explicit aggregate rule in `main()` is simple: `sys.exit(1)` is called if and only if `failure_count > 0`; otherwise `main()` falls through and the interpreter exits 0. The subprocess tests verify the two aggregate outcomes in `test_cli_exit_code_end_to_end`: a run containing one valid image and one corrupted image exits 1 and reports `Processed: 2`, `Failed: 1`, while a run containing only a valid image exits 0 and reports `Processed: 1`, `Failed: 0`.
+
+Per-file worker exceptions do not abort the run. `sort_images()` catches every `Exception` raised by a future, adds a record containing `file`, `type`, and `message` to `errors_list`, logs the error, and continues consuming completed futures. It always logs `Processed: N, Succeeded: N, Failed: N` after the worker phase and returns `(success_count, failure_count, errors_list)`. `test_error_summary_and_exit_code` checks that structure directly and confirms that the valid image is still processed when a neighboring file fails.
+
+Two operational details matter when interpreting those counts:
+
+- Every regular file discovered under `basepath` is submitted to `process_image`, regardless of extension. An unsupported extension is logged at debug level and returns normally, so it is counted as a success even though it produces no output image. `Processed` and `Succeeded` therefore describe submitted files, not the number of generated images.
+- Copying happens before rotation and tagging. If a later step fails, the already-copied destination is not rolled back, while the source file is counted as a failure.
 
 ## Logging
 
-Logging is configured by `setup_logging(level)`, which is called once from `main()` after the `--log` value is resolved to a numeric level. It uses a single `logging.basicConfig` call with a thread-aware format:
+`setup_logging(level)` makes one `logging.basicConfig` call with the format:
 
 ```
 %(asctime)s - [Thread %(thread)d] - %(levelname)s - %(message)s
 ```
 
-The `Thread` field is what makes concurrent output readable: each log line identifies which of the up-to-100 worker threads emitted it, since workers run inside a `ThreadPoolExecutor`. All log output goes to stderr via the default `basicConfig` stream handler.
+The thread field makes concurrent output attributable to the worker that emitted it. In a normal CLI process, the default `basicConfig` stream is stderr, so operational logs are separated from stdout. If the module is embedded in an application that already configured the root logger, `basicConfig` does not replace that existing configuration.
 
-Per-level usage in the pipeline:
+The implementation uses levels as follows:
 
-| Level | What appears at that level |
+| Level | Relevant output |
 | --- | --- |
-| `DEBUG` | Quiet-path diagnostics: unsupported-format skips, EXIF orientation lookups (`Found EXIF Orientation: N`), rotation decisions (`Image rotated 180 degrees`, `No rotation required`), extracted EXIF date strings, missing-orientation-tag errors. |
-| `INFO` | Normal operation: the argument echo (`Script arguments - Basepath: ...`), dry-run banner (`DRY RUN MODE - Simulating processing without copying files`), directory creation, filename-collision notices (`Filename collision detected for ...`), every copy (`Copied X to Y`), the unsupported-for-tagging notice, and the final `Processed: N, Succeeded: N, Failed: N` summary. |
-| `WARNING` | Recoverable degradation: EXIF `DateTimeOriginal` missing so file creation time is used instead, and dry-run failures to pre-check rotation. |
-| `ERROR` | Per-file failures logged by `sort_images` (`Failed to process X: Type: message`), truncated-image reports, tagging struct errors, and general rotation errors. |
+| `DEBUG` | Unsupported-format skips, file-processing diagnostics, EXIF orientation lookup, rotation decisions, extracted EXIF dates, and missing-orientation details. |
+| `INFO` | Argument echo, dry-run banner, directory creation, collision notices, each copy, unsupported tagging notice, and the final `Processed`, `Succeeded`, and `Failed` summary. |
+| `WARNING` | EXIF `DateTimeOriginal` fallback to file creation time and a dry-run rotation check that could not open the image. |
+| `ERROR` | Per-file worker failures, truncated-image reports, rotation errors, EXIF struct errors, and other image or tagging failures. |
+| `CRITICAL` | Accepted as a level, but the implementation does not emit critical messages. Selecting it suppresses normal operational output. |
 
-The default `INFO` level is deliberately chosen for production use: it is the quietest level that still logs every copy and the run summary, which is the minimum an operator needs to reconcile the output tree after a run.
+The default `INFO` level retains the per-file copy records and final summary while omitting the noisier image-inspection diagnostics.
 
 ## Dry-run mode
 
-`--dry-run` changes `process_image` into a pure planning mode; nothing is written except the output directory itself (see the caveat below). The differences:
+`--dry-run` turns `process_image` into a planning path. It does not copy, rotate, or tag image files, and it does not create the date-specific destination folders.
 
-1. `sort_images` logs the banner `DRY RUN MODE - Simulating processing without copying files`.
-2. Date extraction still runs, so the would-be `%Y/%m/%d` destination is computed — but the date folder is **not** created (`os.makedirs` is skipped in dry-run).
-3. Instead of copying, the worker logs `DRY RUN: Would copy <file> to <new_file_path>` (including any `_N` collision suffix that would be applied).
-4. Instead of rotating, it opens the source read-only, reads the EXIF orientation, and logs `DRY RUN: Would rotate image ... by N degrees` (180/270/90 for orientations 3/6/8) or `DRY RUN: No rotation needed for ...`. If the image cannot be opened, it logs a warning `DRY RUN: Could not check rotation for ...` and continues.
-5. Instead of tagging, it logs `DRY RUN: Would add RelativePath tag: RelativePath:<value> to <path>` for `.jpg`/`.jpeg`, or `DRY RUN: Would skip tag for ... (format not supported for tagging)` for other formats.
+1. `sort_images()` still creates the top-level `output_path` if it is missing and logs `DRY RUN MODE - Simulating processing without copying files`.
+2. Date extraction still runs, so the planned `YYYY/MM/DD` destination is calculated, but the date directory is not created.
+3. The worker logs `DRY RUN: Would copy <source> to <destination>`, including the numeric suffix it would use for an existing destination name.
+4. It opens the source read-only to inspect EXIF orientation, then logs the planned rotation angle or `DRY RUN: No rotation needed for ...`.
+5. For destinations whose extension is `.jpg` or `.jpeg`, it logs the planned `RelativePath` tag. Other formats log that tagging would be skipped.
 
-`test_cli_threads_and_dry_run` verifies the contract: with `--threads 5 --dry-run` the CLI exits 0, output contains `DRY RUN` plus the target date folder and filename, and the output directory contains **zero files**. Dry-run is therefore safe to point at a real output directory used by previous real runs — it adds nothing, copies nothing, and modifies nothing (though `sort_images` still creates the top-level `output_path` if it does not exist).
+If the dry-run orientation check cannot open an image, the worker logs `DRY RUN: Could not check rotation for ...` at warning level and continues. That degradation does not count as a file failure, so a dry run can exit 0 even for an image that the real copy-and-rotate path would reject.
 
-## Operational safety model: additive, copy-only
+`test_cli_threads_and_dry_run` exercises `--threads 5 --dry-run` end to end. It verifies exit 0, the presence of `DRY RUN`, the planned date folder and filename in the log, and zero files in the output tree. The top-level output directory may nevertheless exist because `sort_images()` creates it before work is submitted.
 
-The README's Note says it plainly: *"Make sure to back up your images before processing."* The reason this is safe advice rather than mandatory is the tool's fundamental design: **the source tree is never modified**. All mutation (EXIF-based rotation and `RelativePath` tagging) is applied only to the file *after* it has been copied with `shutil.copy2` into `output_path`; the operations then run against `new_file_path`, never the original. The result is additive:
+## Operational safety model: additive and copy-only
 
-- New directories (`output_path/YYYY/MM/DD`) and new files appear in the output tree.
-- If a run is interrupted, the source tree is untouched and partially-written output files can simply be deleted; re-running the tool re-copies everything (already-copied files collide and get `_N` suffixes rather than being overwritten — there is no overwrite or dedup logic).
-- `shutil.copy2` preserves metadata (mtime, permissions), so the copied file keeps its original timestamps even after EXIF edits.
+The README advises, *"Make sure to back up your images before processing."* The intended safety model is that original image files are not edited: `process_image()` copies the source with `shutil.copy2`, then applies orientation correction and `RelativePath` tagging only to the copied destination.
 
-Backing up is still recommended because the tool runs concurrently (up to 100 threads by default 30) and because a misconfigured `output_path` that overlaps `basepath` would create output *inside* the source tree — the tool does not detect or prevent that overlap. Operators should pass distinct paths.
+The output tree is additive:
+
+- There is no content-based deduplication and no intentional overwrite of an existing destination. When the destination name already exists, the code selects `name_1.ext`, `name_2.ext`, and so on; re-running against an existing output therefore creates numeric suffixes rather than replacing earlier results.
+- `shutil.copy2` preserves metadata at the moment of copying. Later rotation or tagging edits the destination and can change file metadata, so the final file should not be assumed to retain every original timestamp.
+- There is no rollback if a post-copy step fails. The destination artifact can remain even though that source file is counted as a failure and contributes to exit status 1.
+- The code does not detect an `output_path` nested inside `basepath`. A later scan can discover earlier output files under the source tree and process them again, so the two trees should be distinct and non-overlapping.
 
 ## CI container
 
-Continuous integration for this project is defined in two small files:
+Continuous integration is defined by two small files:
 
-- **`.ci/test.Dockerfile`** — builds the test image from `python:3.12-slim`, installs the three runtime dependencies with `pip install --no-cache-dir Pillow exifread piexif`, and sets `WORKDIR /workspace`. No other system packages or test tooling are installed.
-- **`.ci/ci.yaml`** — points `image.dockerfile` at `.ci/test.Dockerfile` and defines a single `unit` check whose `cmd` is the array `["python", "-c", "import sortinfolder"]` (executed directly, without a shell). Importing the module compiles and loads it, so the CI gate is effectively "the module imports cleanly in a stock Python 3.12 slim image with Pillow, exifread, and piexif available".
+- **`.ci/test.Dockerfile`** starts from `python:3.12-slim`, installs `Pillow`, `exifread`, and `piexif` with `pip install --no-cache-dir Pillow exifread piexif`, and sets `WORKDIR /workspace`. It installs no other system packages or test tooling.
+- **`.ci/ci.yaml`** points `image.dockerfile` at `.ci/test.Dockerfile` and defines one `unit` check whose `cmd` is `["python", "-c", "import sortinfolder"]`. The command is a shell-less argument array.
 
-This is why the module must remain importable with no top-level side effects: the `if __name__ == "__main__": main()` guard is the only thing that keeps `import sortinfolder` from running a sort. For the behavioral tests that run on top of this gate, see [Test Suite](../testing/test-suite.md).
+The unit job therefore only imports the module; it does **not** run `pytest` or execute the behavioral test file. Its gate is that `sortinfolder` compiles and imports in the Python 3.12 slim image with the three dependencies available. The `if __name__ == "__main__": main()` guard prevents the import from starting a sort. The separate behavioral coverage is described in [Test Suite](../testing/test-suite.md).
 
 ## End-to-end operational flow
 
-<!-- openwiki: mermaid parse failed and this diagram was converted to a text fence so it does not break rendering. Fix the diagram source and restore the mermaid fence. Parser error: Heuristic: an unescaped angle bracket inside a label breaks rendering; rephrase the label. -->
-```text
+```mermaid
 flowchart TD
-    START["python sortinfolder.py basepath output_path --log --threads --dry-run"] --> PARSE["main() parses argparse"]
-    PARSE --> LOGCHK{"--log resolves to int?"}
-    LOGCHK -- "no" --> TYPEERR["TypeError: Invalid log level - exit before any work"]
-    LOGCHK -- "yes" --> SETUP["setup_logging with resolved level"]
-    SETUP --> SI["sort_images validates threads 1-100"]
-    SI -- "out of range" --> VALERR["ValueError raised to caller"]
-    SI -- "valid" --> WALK["os.walk basepath, create output_path if missing"]
-    WALK --> POOL["ThreadPoolExecutor with N workers"]
-    POOL --> RES["count successes and failures, collect error dicts"]
-    RES --> SUM["log summary Processed Succeeded Failed"]
-    SUM --> EXIT{"failure_count > 0?"}
-    EXIT -- "yes" --> ONE["sys.exit 1"]
-    EXIT -- "no" --> ZERO["exit 0"]
+    CLI["Invoke python sortinfolder.py"] --> PARSE["argparse parses paths and options"]
+    PARSE --> ARGCHECK{"Required paths and option types are valid?"}
+    ARGCHECK -- "No" --> ARGFAIL["argparse usage error exits with code 2"]
+    ARGCHECK -- "Yes" --> LOGCHECK{"Log name resolves to an integer?"}
+    LOGCHECK -- "No" --> LOGFAIL["Uncaught TypeError terminates before setup"]
+    LOGCHECK -- "Yes" --> SETUP["setup_logging configures the root logger"]
+    SETUP --> THREADCHECK{"Thread count is between 1 and 100?"}
+    THREADCHECK -- "No" --> THREADFAIL["Uncaught ValueError terminates before walking"]
+    THREADCHECK -- "Yes" --> ORCH["sort_images creates the output root and walks basepath"]
+    ORCH --> POOL["Worker futures run process_image"]
+    POOL --> COLLECT["Collect success counts and failure details"]
+    COLLECT --> SUMMARY["Log Processed Succeeded and Failed counts"]
+    SUMMARY --> FAILCHECK{"Failure count is greater than zero?"}
+    FAILCHECK -- "Yes" --> EXITONE["Exit with code 1"]
+    FAILCHECK -- "No" --> EXITZERO["Exit with code 0"]
 ```
 
-*Caption: from CLI invocation to exit code — log-level validation in `main()`, thread validation in `sort_images()`, and the aggregate failure rule that determines exit 0 or 1.*
+*Caption: From CLI invocation to exit status, including argparse rejection, the two-layer validation split, worker error aggregation, and the final exit rule.*
 
 ## Related pages
 
