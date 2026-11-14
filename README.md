@@ -35,6 +35,15 @@ python sortinfolder.py [basepath] [output_path] [--log LEVEL] [--threads N] [--d
 - `--threads N`: (Optional) Number of worker threads (1-100). Default: 30.
 - `--dry-run`: (Optional) Simulate processing without copying files. Default: false.
 
+## Docker Tests
+
+Run tests inside a Docker container:
+
+```bash
+docker build -f .ci/test.Dockerfile -t sortimages-test .
+docker run --rm -v "$PWD:/workspace" sortimages-test python3 test_sortinfolder.py
+```
+
 ## Functions
 
 - `setup_logging(level)`: Configures the logging system.
